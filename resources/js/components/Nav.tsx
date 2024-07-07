@@ -12,21 +12,26 @@ const Nav: React.FC = () => {
   let logoutLink = null;
 
   if (user) {
-    logoutLink = <button type="button" onClick={logout}></button>
+    logoutLink = <button type="button" onClick={logout}></button>;
   }
   
   return (
-    <nav className="bg-white w-full p-4 h-28">
-      <h1 className="inline-block font-semibold text-2xl">Dom Hart</h1>
-      <ul className="text-center">
+    <nav className="bg-code-dark-gray w-full p-4 h-28 relative text-center">
+      <h1 className="block font-semibold text-2xl w-18 absolute z-5 left-8 top-1/2 -translate-y-1/2 text-code-blue">
+        <Link to="/">Dom Hart</Link>
+      </h1>
+      <ul className="inline-block relative top-1/2 -translate-y-1/2 text-center p-0 text-md font-medium text-code-green">
         <li className="inline-block">
-          <Link to="/">Home</Link>
+          <Link className="block py-4 hover:text-white" to="/">Home.tsx</Link>
         </li>
-        <li className="inline-block ml-4">
-          <Link to="/portfolio">Portfolio</Link>
-          { logoutLink }
+        <li className="inline-block ml-8">
+          <Link className="block py-4" to="/photography">Photography.tsx</Link>
+        </li>
+        <li className="inline-block ml-8">
+          <Link className="block py-4" to="/contact">Contact.tsx</Link>
         </li>
       </ul>
+      { logoutLink }
     </nav>
   );
 };

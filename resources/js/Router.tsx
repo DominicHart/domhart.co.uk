@@ -1,20 +1,22 @@
 import React, { ReactNode } from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home";
-import Portfolio from "./routes/Portfolio";
+import Contact from "./routes/Contact";
 import Nav from './components/Nav';
+import Footer from './components/Footer';
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => (
   <>
     <Nav />
     {children}
+    <Footer />
   </>
 );
 
 const routes = [
   {
-    path: '/portfolio',
-    element: <Portfolio />,
+    path: '/contact',
+    element: <Contact />,
   },
   {
     path: '/',
