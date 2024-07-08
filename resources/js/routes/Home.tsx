@@ -13,7 +13,7 @@ const Home: React.FC = () => {
                 <div className="relative top-1/2 -translate-y-1/2">
                     <h2 className="text-5xl text-center font-semibold text-gray-800">About Me</h2>
                     <div className="2xl:w-7/12 mx-auto mt-12">
-                        <img src="" alt="Dom Hart" className="block mx-auto mb-4 max-w-full h-auto" width="200" />
+                        <img src="../../images/155A2930.jpg" alt="Dom Hart" className="block mx-auto mb-6 max-w-full w-48 h-48 rounded-full object-cover" width="200" />
                         <ul className="text-2xl block text-left bg-code-dark-gray text-code-gray p-10 rounded my-6">
                             <li dangerouslySetInnerHTML={{ __html: '<span class="text-code-blue">const</span> <span class="text-code-yellow">aboutMe</span> <span class="text-white">= ()</span> <span class="text-code-blue">=></span> <span class="text-white">{</span>' }} />
                             <li className="pl-6" dangerouslySetInnerHTML={{ __html: '<span class="text-code-pink">return</span> <span class="text-code-orange">`</span>' }} />

@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
+import Photos from "./routes/Photos";
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 
@@ -17,6 +18,10 @@ const routes = [
   {
     path: '/contact',
     element: <Contact />,
+  },
+  {
+    path: '/photos',
+    element: <Photos />,
   },
   {
     path: '/',

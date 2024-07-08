@@ -25,7 +25,7 @@ const Nav: React.FC = () => {
           <Link className="block py-4 hover:text-white" to="/">Home.tsx</Link>
         </li>
         <li className="inline-block ml-8">
-          <Link className="block py-4" to="/photography">Photography.tsx</Link>
+          <Link className="block py-4" to="/photos">Photos.tsx</Link>
         </li>
         <li className="inline-block ml-8">
           <Link className="block py-4" to="/contact">Contact.tsx</Link>
