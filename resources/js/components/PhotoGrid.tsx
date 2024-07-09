@@ -342,7 +342,7 @@ const PhotoGrid: React.FC = ( props: props ) => {
                   user={user}
                   isEditing={props.isEditing}
                   photo={photo}
-                 />
+                />
               </div>
             )}
           </>
