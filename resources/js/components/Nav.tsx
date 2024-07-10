@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../UserContext';
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Nav: React.FC = () => {
   const user = useContext(UserContext);
@@ -14,7 +14,7 @@ const Nav: React.FC = () => {
   if (user) {
     logoutLink = <button type="button" onClick={logout}></button>;
   }
-  
+
   return (
     <nav className="bg-code-dark-gray w-full p-4 h-28 relative text-center">
       <h1 className="block font-semibold text-2xl w-18 absolute z-5 left-8 top-1/2 -translate-y-1/2 text-code-blue">
@@ -31,7 +31,7 @@ const Nav: React.FC = () => {
           <Link className="block py-4" to="/contact">Contact.tsx</Link>
         </li>
       </ul>
-      { logoutLink }
+      {logoutLink}
     </nav>
   );
 };
