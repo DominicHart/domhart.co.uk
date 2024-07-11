@@ -20,19 +20,21 @@ class Photo implements IPhoto
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->imageManager = new ImageManager(
             new \Intervention\Image\Drivers\Gd\Driver()
         );
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function getPhotosForGrid(): array
+    public function getPhotosForGrid() : array
     {
         $photos = PhotoModel::all();
         $photoRows = [];
+        $count = 0;
 
         foreach ($photos as $photo) {
             $count++;
@@ -54,7 +56,7 @@ class Photo implements IPhoto
                 'image_path' => $photo->image_path,
                 'thumbnail_path' => $photo->thumbnail_path,
                 'carousel_key' => $count,
-                'width' =>  $sizeMeta[0] ?? 0,
+                'width' => $sizeMeta[0] ?? 0,
                 'height' => $sizeMeta[1] ?? 0
             ];
         }
@@ -70,46 +72,51 @@ class Photo implements IPhoto
      * @param [type] $file
      * @return array|null
      */
-    private function resizePhoto($file): ?array
+    private function resizePhoto($file) : ? array
     {
         $ext = $file->getClientOriginalExtension();
-        $fileName = Str::random(32) . '.' .  $ext;
+        $fileName = Str::random(32) . '.' . $ext;
         $thumbnail = $fileName . '_thumbnail.' . $ext;
+        $largeImage = $fileName . '_large.' . $ext;
         $allowed = [
             'png', 'jpg', 'jpeg', 'JPG', 'JPEG'
         ];
-        
+
         if (!in_array($ext, $allowed)) {
             $error = 'Incorrect file type supplied';
             return null;
         }
 
-        ini_set('memory_limit','256M');
+        ini_set('memory_limit', '256M');
 
         try {
             if (!$file->storeAs('', $fileName, 'photos')) {
                 return null;
             }
-            
+
             $path = storage_path('app/photos/' . $fileName);
             $imageObject = $this->imageManager->read($path);
-      
-            $imageObject->scale(height: 1080)
-                ->encodeByMediaType('image/jpeg', progressive: true, quality: 80)
-                ->save($path);
+
+            $largeImagePath = storage_path('app/photos/' . $largeImage);
+
+            $imageObject->scale(height : 1080)
+                ->encodeByMediaType('image/jpeg', progressive : true, quality : 80)
+                ->save($largeImagePath);
 
             $imageObject = $this->imageManager->read($path);
             $thumbnailPath = storage_path('app/photos/' . $thumbnail);
 
-            $imageObject->scaleDown(height: 700)
-                ->encodeByMediaType('image/jpeg', progressive: true, quality: 80)
+            $imageObject->scaleDown(height : 700)
+                ->encodeByMediaType('image/jpeg', progressive : true, quality : 80)
                 ->save($thumbnailPath);
 
+            Storage::disk('photos')->delete($fileName);
+
             return [
-                'image' => $fileName,
+                'image' => $largeImage,
                 'thumbnail' => $thumbnail
             ];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             return null;
         }
@@ -118,7 +125,7 @@ class Photo implements IPhoto
     /**
      * @inheritDoc
      */
-    public function createPhotos(array $data, string &$error = ''): bool
+    public function uploadPhotos(array $data, string &$error = '') : bool
     {
         if (empty($data['photos'])) {
             $error = 'Please select at least one photo';
@@ -147,7 +154,7 @@ class Photo implements IPhoto
     /**
      * @inheritDoc
      */
-    public function getPhoto(string $photoUlid, string &$error = ''): PhotoModel
+    public function getPhoto(string $photoUlid, string &$error = '') : PhotoModel
     {
         $photo = PhotoModel::findByUuid($photoUlid);
 
@@ -167,26 +174,22 @@ class Photo implements IPhoto
         $realBase = realpath(storage_path() . '/app/photos/');
         $realUserPath = realpath(storage_path() . '/app/photos/' . $photoImagePath);
 
-        if (
-            (
-                $realUserPath === false
-                || strpos($realBase, $realUserPath) !== false
-            )
-            || !Storage::disk('photos')->exists($photoImagePath)
-        ) {
+        if (($realUserPath === false
+            || strpos($realBase, $realUserPath) !== false)
+            || !Storage::disk('photos')->exists($photoImagePath)) {
             abort(404);
         }
 
         $file = Storage::disk('photos')->get($photoImagePath);
         $type = Storage::disk('photos')->mimeType($photoImagePath);
-        
+
         return Response::make($file, 200, ['Content-Type' => $type]);
     }
 
     /**
      * @inheritDoc
      */
-    public function replacePhotoImage(Request $request, string $photoUlid, string &$error = ''): bool
+    public function replacePhotoImage(Request $request, string $photoUlid, string &$error = '') : bool
     {
         $photo = $this->getPhoto($photoUlid, $error);
 
@@ -209,7 +212,7 @@ class Photo implements IPhoto
             Storage::disk('photos')->delete($photo->thumbnail_path);
             $photo->thumbnail_path = null;
         }
-    
+
         $fileNames = $this->uploadImage($request->file('image'));
 
         if (!$fileNames) {
@@ -227,7 +230,7 @@ class Photo implements IPhoto
     /**
      * @inheritDoc
      */
-    public function destroyPhoto(string $photoUlid, string &$error): bool
+    public function destroyPhoto(string $photoUlid, string &$error) : bool
     {
         $photo = PhotoModel::findByUuid($photoUlid);
 
@@ -247,13 +250,43 @@ class Photo implements IPhoto
 
         if ($photo->image_path) {
             Storage::disk('photos')->delete($photo->image_path);
-        }        
+        }
 
         if ($photo->thumbnail_path) {
             Storage::disk('photos')->delete($photo->thumbnail_path);
         }
 
         $photo->delete();
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function savePositions(array $data) : bool
+    {
+        if (
+            empty($data['photos']) 
+            || empty($data['changes'])
+        ) {
+            $error = 'No changes have been made';
+            return false;
+        }
+
+        foreach ($data['photos'] as $key => $row) {
+            foreach ($row as $photo) {
+                $photoObject = PhotoModel::where('ulid', $photo['ulid'])
+                    ->first();
+
+                if (null !== $photoObject) {
+                    $photoObject->row = $key;
+                    $photoObject->column = $photo['column'];
+                    $photoObject->save();
+                }
+
+            }
+        }
 
         return true;
     }

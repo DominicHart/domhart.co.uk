@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('photos', function (Blueprint $table) {
-            $table->id();
             $table->string('ulid');
             $table->string('image_path');
             $table->string('thumbnail_path');

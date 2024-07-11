@@ -37,7 +37,7 @@ const Contact: React.FC = () => {
   return (
     <div className="py-20 px-8 relative">
       <h1 className="text-5xl font-semibold text-center text-gray-800">Get in touch</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="2xl:w-6/12 mx-auto mt-10 bg-gray-200 p-12 rounded" autocomplete="off">
+      <form onSubmit={handleSubmit(onSubmit)} className="2xl:w-6/12 mx-auto mt-10 bg-gray-200 p-12 rounded" autoComplete="off">
         {message.message.length > 0 &&
           <div className="text-center rounded font-medium text-2xl w-full text-white mb-6">
             <span className={message.type === 'success' ? 'text-green-600' : 'text-red-600'}>{message.message}</span>

@@ -13,14 +13,12 @@ class Photo extends Model
     use HasFactory;
     use HasUlids;
 
+    protected $primaryKey = 'ulid';
+    public $incrementing = false;
+
     public function newUniqueId(): string
     {
         return Str::ulid()->toRfc4122();
-    }
-
-    protected function getUlidAttribute(): Ulid
-    {
-        return Ulid::fromString($this->attributes['id']);
     }
 
     public static function bootHasUlids()

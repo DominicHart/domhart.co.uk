@@ -100,10 +100,11 @@ const FileDrop: React.FC = (props: props) => {
               </div>
             )}
           </div>
-          <button className="inline-block" onClick={openImageBrowser} id="chooseFile" type="button">Choose file(s) to upload</button>
-          <input type="file" id="imageBrowser" accept="image/jpeg" multiple onChange={selectImages} className="block" />
-          <div className="bg-gray-200 p-1 text-center m-0 w-full">
+          <div className="bg-gray-100 p-1 text-center m-0 w-full mt-2">
             <p className="m-0">{getRemaining()} MB / 500 MB remaining</p>
+          </div>
+          <div className="text-left mt-4 mb-2">
+            <input type="file" id="imageBrowser" accept="image/jpeg" multiple onChange={selectImages} className="inline-block" />
           </div>
         </>
       </div>

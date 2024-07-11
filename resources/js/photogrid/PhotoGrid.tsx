@@ -68,9 +68,10 @@ const PhotoGrid: React.FC = (props: PhotoGridProps) => {
   }
 
   return (
-    Object.entries(props.rows).map((row) =>
-      row[1].length &&
-        <div key={'row-' + i} className="flex flex-auto bg-none min-h-0 relative z-10" style={{ padding: props.isEditing === true ? '0 5%' : '0' }}>
+    <div className="py-0.5">
+      {Object.entries(props.rows).map((row, i) =>
+        row[1].length &&
+        <div key={'row-' + i} className="flex flex-auto bg-none min-h-0 relative z-10 py-0 px-0.5">
           <>
             <RowControls
               rowKey={row[0]}
@@ -86,7 +87,7 @@ const PhotoGrid: React.FC = (props: PhotoGridProps) => {
                   width={photo.width}
                   height={photo.height}
                   data-ulid={photo.ulid}
-                  src={"/api/photo/" + photo.thumbnail_path}
+                  src={"/api/photos/" + photo.thumbnail_path}
                   alt={photo.thumbnail_path}
                   className="inline-block max-w-full max-h-[700px] h-auto m-0 select-none"
                 />
@@ -99,13 +100,12 @@ const PhotoGrid: React.FC = (props: PhotoGridProps) => {
                   photo={photo}
                   activeDropdown={activeDropdown}
                   openDropdown={openDropdown}
-
                   openFileBrowser={openFileBrowser}
                   confirmDelete={confirmDelete}
                 />
                 <PhotoControls
                   rowKey={row[0]}
-                  user={user}
+                  isAuthenticated={props.isAuthenticated}
                   isEditing={props.isEditing}
                   photo={photo}
                   movePhotoDown={handleMovePhotoDown}
@@ -119,7 +119,8 @@ const PhotoGrid: React.FC = (props: PhotoGridProps) => {
             )}
           </>
         </div>
-    )
+      )}
+    </div>
   );
 };
 

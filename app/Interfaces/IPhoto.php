@@ -14,14 +14,14 @@ interface IPhoto
     public function getPhotosForGrid(): array;
 
     /**
-     * Create a new image including file upload
+     * Upload a new photo
      *
      * @param array $data
      *  - ['photos', 'row', 'slug]
      * @param string $error
      * @return boolean
      */
-    public function createPhotos(array $data, string &$error = ''): bool;
+    public function uploadPhotos(array $data, string &$error = ''): bool;
 
     /**
      * Returns a photo object
@@ -58,4 +58,12 @@ interface IPhoto
      * @return boolean
      */
     public function destroyPhoto(string $photoUlid, string &$error): bool;
+
+    /**
+     * Mass updates photo rows and columns for the grid
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function savePositions(array $data) : bool;
 }

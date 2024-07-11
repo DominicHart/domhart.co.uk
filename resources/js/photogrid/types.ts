@@ -35,10 +35,10 @@ export interface PhotoControlsProps {
   isEditing: boolean;
   rowCount: number,
   photoCount: number,
-  moveImageLeft: (e: any) => void;
-  moveImageUp: (e: any) => void;
-  moveImageDown: (e: any) => void;
-  moveImageRight: (e: any) => void;
+  movePhotoLeft: (e: any) => void;
+  movePhotoUp: (e: any) => void;
+  movePhotoDown: (e: any) => void;
+  movePhotoRight: (e: any) => void;
 }
 
 export interface PhotoMenuProps {

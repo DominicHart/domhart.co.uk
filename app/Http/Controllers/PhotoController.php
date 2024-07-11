@@ -29,4 +29,57 @@ class PhotoController extends Controller
         $photos = $this->_photoService->getPhotosForGrid();
         return response()->json($photos, 200);
     }
+
+    public function store(Request $request): JsonResponse
+    {
+        $error = '';
+
+        $created = $this->_photoService->uploadPhotos(
+            [
+                'photos' => $request->file('photos'),
+                'row' => $request->input('row'),
+                'column' => $request->input('column'),
+            ],
+            $error
+        );
+
+        if (!$created) {
+            return response()->json($error, 500); 
+        }
+
+        return response()->json('Image Created', 201);
+    }
+
+    /**
+     *
+     * Return a cover image
+     * @param $image
+     * @return mixed
+     */
+    public function show($path)
+    {
+        return $this->_photoService->streamPhoto($path);
+    }
+
+    /**
+     * 
+     * Update photo positions
+     * @param Request $request
+     * @return JsonResponse
+     */
+   public function savePhotoPositions(Request $request): JsonResponse
+   {
+        $updated = $this->_photoService->savePositions(
+            [
+                'photos' => $request->input('photos'),
+                'changes' => $request->input('changes')
+            ]
+        );
+
+        if (!$updated) {
+            return response()->json('No changes were saved', 400);
+        }
+
+        return response()->json('Your changes have been saved!', 200);
+   }
 }

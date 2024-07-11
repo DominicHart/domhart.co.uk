@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { getPhotos, uploadPhoto } from '../api/Photo';
+import React, { useState, useEffect } from 'react';
+import { getPhotos, uploadPhoto, savePhotoPositions } from '../api/Photo';
 import { PhotoRows } from '../photogrid/types';
 import PhotoGrid from '../photogrid/PhotoGrid';
 import { File } from '../types/photo';
-import { UserContext } from '../UserContext';
+import { useUser } from '../UserContext';
 import { savingData, modalStyles } from "../utils";
 import Swal from "sweetalert2";
 import Modal from 'react-modal';
@@ -22,6 +22,7 @@ const customStyles = {
     width: '80%',
     background: 'white',
   },
+  overlay: { zIndex: 1000 }
 };
 
 Modal.setAppElement('#app');
@@ -29,9 +30,12 @@ Modal.setAppElement('#app');
 const Photos: React.FC = () => {
   const [photos, setPhotos] = useState<PhotoRows>({}),
     [files, setFiles] = useState<File[]>([]),
-    [modalIsOpen, setIsOpen] = useState(false);
+    [modalIsOpen, setIsOpen] = useState(false),
+    [selectedPhotos, setSelectedPhotos] = useState([]),
+    [changes, setChanges] = useState(0),
+    [isEditing, setIsEditing] = useState(false);
 
-  const user = useContext(UserContext);
+  const user = useUser();
 
   const openModal = () => {
     setIsOpen(true);
@@ -41,7 +45,7 @@ const Photos: React.FC = () => {
     if (files.length) {
       setFiles([]);
     }
-    
+
     setIsOpen(false);
   }
 
@@ -49,8 +53,29 @@ const Photos: React.FC = () => {
     setPhotos(await getPhotos());
   }
 
+  const saveChanges = (e) => {
+    let formData = new FormData();
+    formData.append('photos', photos);
+    formData.append('changes', changes);
+
+    savePhotoPositions(formData).then((response) => {
+      if (!response) {
+        Swal.fire('Error', 'An error occurred while saving photo positions!', 'error');
+        return;
+      } else {
+        setChanges(0);
+      }
+    });
+  }
+
   const uploadPhotos = (e: any) => {
     e.preventDefault();
+
+    if (files.length === 0) {
+      Swal.fire('Select Photos', 'You haven\'t selected any photos!', 'warning');
+      return;
+    }
+
     savingData('Photos')
 
     let totalFileSize = 0;
@@ -83,7 +108,7 @@ const Photos: React.FC = () => {
         let fd = new FormData()
         fd.append('row', row.toString())
         fd.append('column', column.toString())
-        fd.append('photos[]', files[i].toString());
+        fd.append('photos[]', files[i]);
 
         uploadPhoto(fd).then((response) => {
           if (!response) {
@@ -101,6 +126,7 @@ const Photos: React.FC = () => {
           Swal.fire('Photos Uploaded', 'All Photos were successfully uploaded!', 'success')
           getData();
           setFiles([]);
+          closeModal();
           return;
         }
 
@@ -120,7 +146,17 @@ const Photos: React.FC = () => {
 
   return (
     <>
-      <button onClick={openModal}>Open Modal</button>
+      {user &&
+        isEditing ?
+        <div className="p-0.5">
+          <button type="button" className="bg-gray-300" onClick={openModal}>Open Modal</button>
+          <button type="button" className="ml-4" onClick={() => setIsEditing(false)}>Cancel</button>
+        </div>
+        :
+        <div className="p-0.5">
+          <button type="button" onClick={() => setIsEditing(true)}>Edit</button>
+        </div>
+      }
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
@@ -131,14 +167,24 @@ const Photos: React.FC = () => {
           title="Upload Images"
           closeModal={closeModal}
         />
-        <FileDrop 
-          files={files} 
-          setFiles={setFiles} 
+        <FileDrop
+          files={files}
+          setFiles={setFiles}
         />
+        <div className="text-right border-t border-gray-300 mt-6 py-6 px-3">
+          <button type="button" className="border border-gray-300 py-3 px-6 font-semibold bg-gray-300 rounded" onClick={closeModal}>Dismiss</button>
+          <button type="button" className="border border-code-dark-gray font-semibold py-3 px-6 ml-2 bg-code-dark-gray text-code-green rounded" onClick={uploadPhotos}>Upload Photos</button>
+        </div>
       </Modal>
       <PhotoGrid
-        isAuthenticated={typeof user != undefined}
+        isAuthenticated={user !== null}
+        isEditing={isEditing}
         rows={photos}
+        updateRows={setPhotos}
+        selectedPhotos={selectedPhotos}
+        updateSelectedPhotos={setSelectedPhotos}
+        changes={changes}
+        increaseChanges={setChanges}
       />
     </>
   );

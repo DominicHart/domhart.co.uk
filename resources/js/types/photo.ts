@@ -6,3 +6,7 @@ export interface File {
 export interface ImageUploadedResponse {
     uploaded: boolean
 }
+
+export interface PhotoPositionsSavedResponse {
+    saved: boolean
+}

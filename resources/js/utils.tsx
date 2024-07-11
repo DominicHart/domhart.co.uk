@@ -1,5 +1,23 @@
 import Swal from "sweetalert2";
 
+export const getToken = () => {
+    return localStorage.getItem('token');
+}
+
+export const getHeaders = () => {
+    const token = getToken();
+
+    if (!token) {
+        return {}
+    }
+
+    return {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+}
+
 export const apiUrl = (): string => {
     return '/api';
 }
@@ -14,7 +32,6 @@ export const pleaseWait = (title: string) => {
 export const savingData = (type: string) => {
     Swal.fire({
         showConfirmButton: false,
-        imageUrl: loader,
         title: 'Saving ' + type + ' ...',
         text: '',
     })

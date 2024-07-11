@@ -1,27 +1,23 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { authCheck } from "./api/User";
 import { UserData } from './types/user';
 
-type UserContextType = {
-  user: UserData | undefined;
-  setUser: React.Dispatch<React.SetStateAction<UserData | undefined>>;
-};
+const UserContext = createContext();
 
-export const UserContext = createContext<UserContextType>({
-  user: undefined,
-  setUser: () => {},
-});
-
-export const UserProvider: React.FC = () => {
-  const [user, setUser] = useState<UserData | undefined>(undefined);
+export const UserProvider: React.FC = ({ children }) => {
+  const [user, setUser] = useState<UserData | null>(null),
+    [loading, setLoading] = useState(true),
+    [error, setError] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
-      const { user: UserData, error } = await authCheck();
-      if (error) {
-        console.log(error);
-      } else {
-        setUser(UserData);
+      try {
+        const user = await authCheck();
+        setUser(user);
+      } catch (err) {
+        localStorage.removeItem('token');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -29,6 +25,12 @@ export const UserProvider: React.FC = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }} />
+    <UserContext.Provider value={ user }>
+    {children}
+  </UserContext.Provider>
   );
+};
+
+export const useUser = () => {
+  return useContext(UserContext);
 };

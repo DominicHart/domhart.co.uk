@@ -1,18 +1,20 @@
-import React, { useContext } from 'react';
-import { UserContext } from '../UserContext';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useUser } from '../UserContext';
 
 const Nav: React.FC = () => {
-  const user = useContext(UserContext);
+  const user = useUser();
 
   const logout = (e) => {
     e.preventDefault();
+    // Remove token
+    // Api call
   }
 
   let logoutLink = null;
 
   if (user) {
-    logoutLink = <button type="button" onClick={logout}></button>;
+    logoutLink = <button type="button" onClick={logout} className="text-code-yellow absolute right-8 top-1/2 -translate-y-1/2">Logout();</button>;
   }
 
   return (
