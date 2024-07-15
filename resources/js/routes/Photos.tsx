@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPhotos, uploadPhoto, savePhotoPositions } from '../api/Photo';
+import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto } from '../api/Photo';
 import { PhotoRows } from '../photogrid/types';
 import PhotoGrid from '../photogrid/PhotoGrid';
 import { File } from '../types/photo';
@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import Modal from 'react-modal';
 import ModalHeader from '../components/modal/ModalHeader';
 import FileDrop from '../components/FileDrop';
+import PhotoMenu from '../components/photogrid/PhotoMenu';
 
 const customStyles = {
   content: {
@@ -33,7 +34,8 @@ const Photos: React.FC = () => {
     [modalIsOpen, setIsOpen] = useState(false),
     [selectedPhotos, setSelectedPhotos] = useState([]),
     [changes, setChanges] = useState(0),
-    [isEditing, setIsEditing] = useState(false);
+    [isEditing, setIsEditing] = useState(false),
+    [activeDropdown, setActiveDropdown] = useState(null);
 
   const user = useUser();
 
@@ -53,10 +55,12 @@ const Photos: React.FC = () => {
     setPhotos(await getPhotos());
   }
 
-  const saveChanges = (e) => {
+  const saveChanges = (e: any) => {
+    e.preventDefault();
+
     let formData = new FormData();
-    formData.append('photos', photos);
-    formData.append('changes', changes);
+    formData.append('photos', JSON.stringify(photos));
+    formData.append('changes', changes.toString());
 
     savePhotoPositions(formData).then((response) => {
       if (!response) {
@@ -76,7 +80,7 @@ const Photos: React.FC = () => {
       return;
     }
 
-    savingData('Photos')
+    savingData('Photos');
 
     let totalFileSize = 0;
 
@@ -140,21 +144,96 @@ const Photos: React.FC = () => {
       })
   }
 
+  const openDropdown = (e: any) => {
+    e.preventDefault();
+
+    if (activeDropdown === e.target.dataset.key) {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown(e.target.dataset.key)
+    }
+  }
+
+  const openFileBrowser = (e: Event) => {
+    e.preventDefault();
+    const fileBrowser = document.getElementById('imageSelection'),
+      id = e.target.getAttribute('href');
+
+    if (fileBrowser) {
+      fileBrowser.dataset.id = id;
+      fileBrowser.click();
+    }
+  }
+
+  const updatePhoto = (e: any) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      Swal.fire('Aborted', 'No Photo Selected', 'warning');
+      return;
+    }
+
+    savingData('Photos');
+
+    let formData = new FormData();
+    formData.append('photo', file);
+    formData.append('_method', 'PATCH');
+
+    replacePhoto(e.target.dataset.id, formData).then((response) => {
+      if (!response) {
+        Swal.fire('Upload Failed', 'The photo was not replaced due to an unexpected error');
+      } else {
+        Swal.close();
+        getData();
+      }
+    });
+  }
+
+  const confirmDelete = (e: any) => {
+    //
+  }
+
+  const updateSelectedPhotos = (e: any) => {
+    let newSelectedPhotos = [...selectedPhotos];
+
+    if (e.target.checked) {
+      newSelectedPhotos.push(e.target.value);
+    } else {
+      newSelectedPhotos = newSelectedPhotos.filter(function (item) {
+        return item !== e.target.value;
+      })
+    }
+
+    setSelectedPhotos(newSelectedPhotos);
+  }
+
   useEffect(() => {
     getData();
   }, []);
+
+  const photoMenu = <PhotoMenu
+    selectedPhotos={selectedPhotos}
+    updateSelectedPhotos={updateSelectedPhotos}
+    activeDropdown={activeDropdown}
+    openDropdown={openDropdown}
+    openFileBrowser={openFileBrowser}
+    confirmDelete={confirmDelete}
+  />
 
   return (
     <>
       {user &&
         isEditing ?
-        <div className="p-0.5">
-          <button type="button" className="bg-gray-300" onClick={openModal}>Open Modal</button>
-          <button type="button" className="ml-4" onClick={() => setIsEditing(false)}>Cancel</button>
+        <div className="px-1 text-center mt-1">
+          <button type="button" className="rounded inline-block bg-blue-600 py-1 px-4 font-semibold text-white" onClick={openModal}>Upload Photos</button>
+          {changes > 0 &&
+            <button type="button" className="rounded inline-block bg-green-700 text-white py-1 px-4 font-semibold ml-2" onClick={saveChanges}>Save Changes</button>
+          }
+          <button type="button" className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold ml-2" onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
         :
-        <div className="p-0.5">
-          <button type="button" onClick={() => setIsEditing(true)}>Edit</button>
+        <div className="px-1 text-center mt-1">
+          <button className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold" type="button" onClick={() => setIsEditing(true)}>Edit</button>
         </div>
       }
       <Modal
@@ -177,15 +256,16 @@ const Photos: React.FC = () => {
         </div>
       </Modal>
       <PhotoGrid
-        isAuthenticated={user !== null}
-        isEditing={isEditing}
+        isEditing={isEditing && user !== null}
         rows={photos}
         updateRows={setPhotos}
         selectedPhotos={selectedPhotos}
         updateSelectedPhotos={setSelectedPhotos}
         changes={changes}
-        increaseChanges={setChanges}
+        increaseChanges={() => setChanges(changes + 1)}
+        photoMenu={photoMenu}
       />
+      <input type="file" className="hidden" id="imageSelection" onChange={updatePhoto} />
     </>
   );
 };

@@ -24,13 +24,13 @@ class PhotoController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request) : JsonResponse
     {
         $photos = $this->_photoService->getPhotosForGrid();
         return response()->json($photos, 200);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request) : JsonResponse
     {
         $error = '';
 
@@ -44,7 +44,7 @@ class PhotoController extends Controller
         );
 
         if (!$created) {
-            return response()->json($error, 500); 
+            return response()->json($error, 500);
         }
 
         return response()->json('Image Created', 201);
@@ -67,11 +67,11 @@ class PhotoController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-   public function savePhotoPositions(Request $request): JsonResponse
-   {
+    public function savePhotoPositions(Request $request) : JsonResponse
+    {
         $updated = $this->_photoService->savePositions(
             [
-                'photos' => $request->input('photos'),
+                'photos' => json_decode($request->input('photos')),
                 'changes' => $request->input('changes')
             ]
         );
@@ -81,5 +81,30 @@ class PhotoController extends Controller
         }
 
         return response()->json('Your changes have been saved!', 200);
-   }
+    }
+
+    /**
+     * Replaced a photo
+     *
+     * @param Request $request
+     * @param string $ulid
+     * @return JsonResponse
+     */
+    public function update(Request $request, string $ulid) : JsonResponse
+    {
+        $error = '';
+        $replaced = $this->_photoService->replacePhotoImage(
+            [
+                'photo' => $request->file('photo')
+            ],
+            $ulid,
+            $error
+        );
+
+        if (!$replaced) {
+            return response()->json($error, 400);
+        }
+
+        return response()->json('The photo was replaced!', 200);
+    }
 }

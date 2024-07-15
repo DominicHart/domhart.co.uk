@@ -1,90 +1,149 @@
-import { PhotoItem, PhotoRows, PhotoUlidAndRowKey, PhotoGridProps } from './types';
+import { PhotoItem, PhotoRows, PhotoIdAndRowKey, PhotoGridProps } from './types';
 
+/**
+ * Sorts the photos in a row by column number
+ * @param row 
+ */
 export const sortRow = (row: PhotoItem[]) => {
-  return row.sort((a, b) => parseFloat(a.column) - parseFloat(b.column))
+  return row.sort((a, b) => Math.floor(a.column) - Math.floor(b.column))
 }
 
-const getPhotoFromUlid = (row: any, ulid: string): PhotoItem => {
-  return row.find((photo: PhotoItem) => {
-    return photo.ulid === ulid;
-  });
+/**
+ * Get a photo from a row via id
+ * @param row 
+ * @param id 
+ */
+const getPhotoForId = (row: PhotoItem[], id: string): PhotoItem => {
+  const photoResult = row.find(photo => photo.id === id);
+
+  if (photoResult === undefined) {
+    throw new TypeError('No photo was found in this row for that id');
+  }
+
+  return photoResult;
 }
 
-const getPhotoFromColumn = (row: any, column: number): PhotoItem => {
-  return row.find((photo: PhotoItem) => {
-    return photo.column === column;
-  });
+/**
+ * Get a photo from a row by column number
+ * @param row 
+ * @param column 
+ */
+const getPhotoForColumn = (row: PhotoItem[], column: number): PhotoItem => {
+  const photoResult = row.find(photo => photo.column === column);
+
+  if (photoResult === undefined) {
+    throw new TypeError('No photo was found in this row for that column');
+  }
+
+  return photoResult;
 }
 
-const deletePhotoFromRowByColumn = (row: any, column: number): any => {
+/**
+ * Deletes a photo from a row by column number
+ * @param row 
+ * @param column 
+ */
+const deletePhotoFromRowByColumn = (row: PhotoItem[], column: number): PhotoItem[] => {
   return row.filter((photo: PhotoItem) => photo.column !== column);
 }
 
-const addPhotoToRow = (row: any, photo: PhotoItem, column: number): any => {
+/**
+ * Adds a photo to a row
+ * @param row 
+ * @param photo 
+ * @param column 
+ */
+const addPhotoToRow = (row: PhotoItem[] = [], photo: PhotoItem, column: number): PhotoItem[] => {
   photo.column = column;
   row.push(photo);
   return row;
 }
 
-const swapPhotosAround = (row: any, rowKey: number, rowsCopy: PhotoRows, firstPhoto: PhotoItem, secondPhoto: PhotoItem) => {
+/**
+ * Swaps two photos around in the row
+ * @param row 
+ * @param firstPhoto 
+ * @param secondPhoto 
+ */
+const swapPhotosAround = (
+  row: PhotoItem[],
+  firstPhoto: PhotoItem,
+  secondPhoto: PhotoItem): PhotoItem[] => {
   const firstColumn = firstPhoto.column,
     secondColumn = secondPhoto.column;
-    
+
   row = deletePhotoFromRowByColumn(row, firstColumn);
   row = deletePhotoFromRowByColumn(row, secondColumn);
   row = addPhotoToRow(row, firstPhoto, secondColumn);
   row = addPhotoToRow(row, secondPhoto, firstColumn);
 
-  delete rowsCopy[rowKey];
-  rowsCopy[rowKey] = row;
-
-  return rowsCopy;
+  return row;
 }
 
-const getPhotoUlidAndRowKey = (e: any): PhotoUlidAndRowKey => {
+/**
+ * Extract the row key and photo id from the clicked element
+ * @param e 
+ */
+const getPhotoIdAndRowKey = (e: any): PhotoIdAndRowKey => {
   return {
-    ulid: e.target.dataset.ulid,
+    id: e.target.dataset.id,
     rowKey: parseInt(e.target.dataset.row)
   }
 }
 
+/**
+ * Moves a photo one column to the left
+ * @param e 
+ * @param props 
+ */
 export const movePhotoLeft = (e: any, props: PhotoGridProps) => {
   e.preventDefault();
 
-  const { ulid, rowKey } = getPhotoUlidAndRowKey(e);
+  const { id, rowKey } = getPhotoIdAndRowKey(e);
 
   let rowsCopy = { ...props.rows },
     thisRow = sortRow(rowsCopy[rowKey]);
 
-  const thisPhoto = getPhotoFromUlid(thisRow, ulid);
+  const thisPhoto = getPhotoForId(thisRow, id);
 
   if (thisPhoto.column === 1) {
     return;
   }
 
-  const beforePhoto = getPhotoFromColumn(thisRow, thisPhoto.column - 1);
-  rowsCopy = swapPhotosAround(thisRow, rowKey, rowsCopy, beforePhoto, thisPhoto);
+  const beforePhoto = getPhotoForColumn(thisRow, thisPhoto.column - 1);
+  thisRow = swapPhotosAround(thisRow, beforePhoto, thisPhoto);
+
+  delete rowsCopy[rowKey];
+  rowsCopy[rowKey] = thisRow;
 
   props.updateRows(rowsCopy);
   props.increaseChanges();
 }
 
+/**
+ * Move a photo one column to the right
+ * @param e 
+ * @param props 
+ */
 export const movePhotoRight = (e: any, props: PhotoGridProps) => {
   e.preventDefault();
 
-  const { ulid, rowKey } = getPhotoUlidAndRowKey(e);
+  const { id, rowKey } = getPhotoIdAndRowKey(e);
 
   let rowsCopy = { ...props.rows },
     thisRow = sortRow(rowsCopy[rowKey]);
 
-  const thisPhoto = getPhotoFromUlid(thisRow, ulid);
+  const thisPhoto = getPhotoForId(thisRow, id);
 
   if (thisPhoto.column === thisRow.length) {
     return;
   }
 
-  const afterPhoto = getPhotoFromColumn(thisRow, thisPhoto.column + 1);
-  rowsCopy = swapPhotosAround(thisRow, rowKey, rowsCopy, thisPhoto, afterPhoto);
+  const afterPhoto = getPhotoForColumn(thisRow, thisPhoto.column + 1);
+  thisRow = swapPhotosAround(thisRow, thisPhoto, afterPhoto);
+
+  delete rowsCopy[rowKey];
+  rowsCopy[rowKey] = thisRow;
 
   props.updateRows(rowsCopy);
   props.increaseChanges();
@@ -96,9 +155,9 @@ export const movePhotoRight = (e: any, props: PhotoGridProps) => {
  * @param start 
  * @param end 
  */
-const shufflePhotosBackOneColumn = (row: any, start: number, end: number): any => {
+const shufflePhotosBackOneColumn = (row: PhotoItem[], start: number, end: number): PhotoItem[] => {
   for (let x = start; x <= end; x++) {
-    const selectedPhoto = getPhotoFromColumn(row, x);
+    const selectedPhoto = getPhotoForColumn(row, x);
     row = deletePhotoFromRowByColumn(row, x);
     row = addPhotoToRow(row, selectedPhoto, selectedPhoto.column - 1);
   }
@@ -106,9 +165,14 @@ const shufflePhotosBackOneColumn = (row: any, start: number, end: number): any =
   return row;
 }
 
-const shufflePhotosForwardOneColumn = (row: any, start: number): any => {
+/**
+ * All the photos in the the row move forward a column (to the right)
+ * @param row 
+ * @param start 
+ */
+const shufflePhotosForwardOneColumn = (row: PhotoItem[], start: number): PhotoItem[] => {
   for (let x = start; x > 0; x--) {
-    const selectedPhoto = getPhotoFromColumn(row, x);
+    const selectedPhoto = getPhotoForColumn(row, x);
     row = deletePhotoFromRowByColumn(row, x);
     row = addPhotoToRow(row, selectedPhoto, selectedPhoto.column + 1);
   }
@@ -116,20 +180,25 @@ const shufflePhotosForwardOneColumn = (row: any, start: number): any => {
   return row;
 }
 
+/**
+ * Moves a photo to the end of the previous row
+ * @param e 
+ * @param props 
+ */
 export const movePhotoUp = (e: any, props: PhotoGridProps) => {
   e.preventDefault();
-  const { ulid, rowKey } = getPhotoUlidAndRowKey(e);
+  const { id, rowKey } = getPhotoIdAndRowKey(e);
 
   let rowsCopy = { ...props.rows },
     thisRow = sortRow(rowsCopy[rowKey]),
     previousRowKey = rowKey - 1,
-    previousRow: any = [];
+    previousRow: PhotoItem[] = [];
 
   if (rowsCopy[previousRowKey] != undefined) {
     previousRow = sortRow(rowsCopy[previousRowKey]);
   }
 
-  const thisPhoto = getPhotoFromUlid(thisRow, ulid);
+  const thisPhoto = getPhotoForId(thisRow, id);
 
   let start = thisPhoto.column + 1,
     end = thisRow.length;
@@ -150,15 +219,20 @@ export const movePhotoUp = (e: any, props: PhotoGridProps) => {
   props.increaseChanges();
 }
 
+/**
+ * Moves a photo to the beginning of the next row
+ * @param e 
+ * @param props 
+ */
 export const movePhotoDown = (e: any, props: PhotoGridProps) => {
   e.preventDefault();
-  const { ulid, rowKey } = getPhotoUlidAndRowKey(e);
+  const { id, rowKey } = getPhotoIdAndRowKey(e);
 
   let rowsCopy = { ...props.rows },
     thisRow = sortRow(rowsCopy[rowKey]),
     nextRowKey = rowKey + 1;
 
-  const thisPhoto = getPhotoFromUlid(thisRow, ulid);
+  const thisPhoto = getPhotoForId(thisRow, id);
 
   let start = thisPhoto.column + 1,
     end = thisRow.length;
@@ -201,7 +275,13 @@ export const movePhotoDown = (e: any, props: PhotoGridProps) => {
  * @param secondRow 
  * @param secondRowKey 
  */
-const swapRows = (rows: PhotoRows, firstRow: any, firstRowKey: number, secondRow: any, secondRowKey: number): any => {
+const swapRows = (
+  rows: PhotoRows,
+  firstRow: PhotoItem[],
+  firstRowKey: number,
+  secondRow: PhotoItem[],
+  secondRowKey: number
+): PhotoRows => {
   delete rows[secondRowKey];
   delete rows[firstRowKey];
   rows[secondRowKey] = firstRow;
@@ -210,6 +290,11 @@ const swapRows = (rows: PhotoRows, firstRow: any, firstRowKey: number, secondRow
   return rows;
 }
 
+/**
+ * Move a row up
+ * @param e 
+ * @param props 
+ */
 export const moveRowUp = (e: any, props: PhotoGridProps) => {
   e.preventDefault();
   const rowKey = parseInt(e.target.dataset.row),
@@ -225,6 +310,11 @@ export const moveRowUp = (e: any, props: PhotoGridProps) => {
   props.increaseChanges();
 }
 
+/**
+ * Moves a row down
+ * @param e 
+ * @param props 
+ */
 export const moveRowDown = (e: any, props: PhotoGridProps) => {
   e.preventDefault();
   const rowKey = parseInt(e.target.dataset.row),

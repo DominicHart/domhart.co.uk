@@ -43,15 +43,17 @@ class Photo implements IPhoto
             if ($photo->thumbnail_path) {
                 $path = storage_path('app/photos/' . $photo->thumbnail_path);
 
-                try {
-                    $sizeMeta = getimagesize($path);
-                } catch (Exception $e) {
-                    Log::error($e->getMessage());
+                if (file_exists($path)) {
+                    try {
+                        $sizeMeta = getimagesize($path);
+                    } catch (Exception $e) {
+                        Log::error($e->getMessage());
+                    }
                 }
             }
 
             $photoRows[$key][] = [
-                'ulid' => $photo->ulid,
+                'id' => $photo->ulid,
                 'column' => $photo->column,
                 'image_path' => $photo->image_path,
                 'thumbnail_path' => $photo->thumbnail_path,
@@ -156,7 +158,8 @@ class Photo implements IPhoto
      */
     public function getPhoto(string $photoUlid, string &$error = '') : PhotoModel
     {
-        $photo = PhotoModel::findByUuid($photoUlid);
+        $photo = PhotoModel::where('ulid', $photoUlid)
+            ->first();
 
         if (null === $photo) {
             $error = 'Photo not found';
@@ -189,7 +192,7 @@ class Photo implements IPhoto
     /**
      * @inheritDoc
      */
-    public function replacePhotoImage(Request $request, string $photoUlid, string &$error = '') : bool
+    public function replacePhotoImage(array $data, string $photoUlid, string &$error = '') : bool
     {
         $photo = $this->getPhoto($photoUlid, $error);
 
@@ -198,7 +201,7 @@ class Photo implements IPhoto
             return false;
         }
 
-        if (!$request->file('image')) {
+        if (!$data['photo']) {
             $error = 'Replacement file not found';
             return false;
         }
@@ -213,7 +216,7 @@ class Photo implements IPhoto
             $photo->thumbnail_path = null;
         }
 
-        $fileNames = $this->uploadImage($request->file('image'));
+        $fileNames = $this->resizePhoto($data['photo']);
 
         if (!$fileNames) {
             $error = 'Failed to upload image and generate thumbnail';
@@ -266,17 +269,17 @@ class Photo implements IPhoto
      */
     public function savePositions(array $data) : bool
     {
-        if (
-            empty($data['photos']) 
-            || empty($data['changes'])
-        ) {
+        if (empty($data['photos'])
+            || empty($data['changes'])) {
             $error = 'No changes have been made';
             return false;
         }
 
         foreach ($data['photos'] as $key => $row) {
             foreach ($row as $photo) {
-                $photoObject = PhotoModel::where('ulid', $photo['ulid'])
+                $photo = is_object($photo) ? (array)$photo : $photo;
+
+                $photoObject = PhotoModel::where('ulid', $photo['id'])
                     ->first();
 
                 if (null !== $photoObject) {

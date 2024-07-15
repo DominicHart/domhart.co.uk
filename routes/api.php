@@ -14,5 +14,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::post('contact', [ContactController::class, 'submit']);
 
-Route::post('photos/save-positions', [PhotoController::class, 'savePositions']);
+Route::post('photos/save-positions', [PhotoController::class, 'savePhotoPositions']);
 Route::resource('photos', PhotoController::class);

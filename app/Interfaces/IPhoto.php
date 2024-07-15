@@ -43,12 +43,12 @@ interface IPhoto
     /**
      * Replaces a photo file
      *
-     * @param Request $request
+     * @param array $data
      * @param string $photoUlid
      * @param string $error
      * @return boolean
      */
-    public function replacePhotoImage(Request $request, string $photoUlid, string &$error = ''): bool;
+    public function replacePhotoImage(array $data, string $photoUlid, string &$error = ''): bool;
 
     /**
      * Destroys a photo

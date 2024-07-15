@@ -1,10 +1,12 @@
-export interface PhotoUlidAndRowKey {
-  ulid: string;
+import { ReactElement } from "react";
+
+export interface PhotoIdAndRowKey {
+  id: string;
   rowKey: number;
 }
 
 export interface PhotoItem {
-  ulid: string;
+  id: string;
   column: number;
   image_path: string;
   thumbnail_path: string;
@@ -18,7 +20,6 @@ export interface PhotoRows {
 }
 
 export interface PhotoGridProps {
-  isAuthenticated: boolean;
   rows: PhotoRows;
   updateRows: (rows: PhotoRows) => void;
   changes: number;
@@ -26,13 +27,12 @@ export interface PhotoGridProps {
   isEditing: boolean;
   selectedPhotos: Array<string>;
   updateSelectedPhotos: (ids: Array<string>) => void;
+  photoMenu: ReactElement | undefined
 }
 
 export interface PhotoControlsProps {
   rowKey: string;
   photo: PhotoItem;
-  isAuthenticated: boolean;
-  isEditing: boolean;
   rowCount: number,
   photoCount: number,
   movePhotoLeft: (e: any) => void;
@@ -40,24 +40,8 @@ export interface PhotoControlsProps {
   movePhotoDown: (e: any) => void;
   movePhotoRight: (e: any) => void;
 }
-
-export interface PhotoMenuProps {
-  rowKey: string | number;
-  isAuthenticated: boolean;
-  isEditing: boolean;
-  selectedPhotos: Array<string>;
-  updateSelectedPhotos: (ids: Array<string>) => void;
-  photo: PhotoItem;
-  activeDropdown: string;
-  openDropdown: (e: any) => void;
-  openFileBrowser: (e: any) => void;
-  confirmDelete: (e: any) => void;
-}
-
 export interface RowControlsProps {
   rowKey: string | number;
-  isAuthenticated: boolean;
-  isEditing: boolean;
   moveRowUp: (e: any) => void;
   moveRowDown: (e: any) => void;
   rowCount: number
