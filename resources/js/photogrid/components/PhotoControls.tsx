@@ -1,9 +1,10 @@
 import React from 'react';
 import { PhotoControlsProps } from '../types';
+import'../styles.css';
 
 const PhotoControls: React.FC = (props: PhotoControlsProps) => {
   return (
-    <ul className="photo__controls">
+    <ul className="photogrid--photo__controls">
       {props.photo.column > 1 &&
         <li>
           <button type="button" className="photo__control" onClick={props.movePhotoLeft} data-id={props.photo.id} data-row={props.rowKey}>

@@ -3,6 +3,7 @@ import { PhotoGridProps } from './types';
 import { sortRow, movePhotoLeft, movePhotoUp, movePhotoDown, movePhotoRight, moveRowUp, moveRowDown } from "./utils";
 import RowControls from './components/RowControls';
 import PhotoControls from './components/PhotoControls';
+import './styles.css';
 
 const PhotoGrid: React.FC = (props: PhotoGridProps) => {
   const handleMovePhotoUp = (e: any) => {
@@ -37,7 +38,7 @@ const PhotoGrid: React.FC = (props: PhotoGridProps) => {
     <div className="photogrid">
       {Object.entries(props.rows).map((row, i) =>
         row[1].length &&
-        <div key={'row-' + i} className={props.isEditing ? "photo__row editing" : "photo__row"}>
+        <div key={'row-' + i} className={props.isEditing ? "photogrid--photo__row editing" : "photogrid--photo__row"}>
           <>
             {props.isEditing &&
               <RowControls
@@ -48,14 +49,13 @@ const PhotoGrid: React.FC = (props: PhotoGridProps) => {
               />
             }
             {sortRow(row[1]).map((photo, i2) =>
-              <div key={'photo-' + i + i2} className="photo__column relative align-middle block relative m-0.5">
+              <div key={'photo-' + i + i2} className="photogrid--photo__column">
                 <img
                   width={photo.width}
                   height={photo.height}
                   data-id={photo.id}
                   src={"/api/photos/" + photo.thumbnail_path}
                   alt={photo.thumbnail_path}
-                  className="block md:inline-block max-w-full max-h-[700px] h-auto m-0 select-none"
                 />
                 {props.isEditing &&
                   <>

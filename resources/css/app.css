@@ -14,42 +14,6 @@ h1, h2, h3, h4, h5, h6, p, a, button, span {
     'opsz' 24
 }
 
-.photogrid {
-    @apply py-0.5;
-}
-
-.row__controls {
-    @apply absolute block left-1 top-1/2 -translate-y-1/2 z-20;
-}
-
-.row__controls > li {
-    @apply block;
-}
-
-.photo__control, .row__control {
-    @apply bg-code-dark-gray text-code-green w-9 h-9 py-0 px-2 block text-2xl rounded;
-}
-
-.photo__controls {
-    @apply block absolute bottom-1 left-1/2 -translate-x-1/2 text-center;
-}
-
-.photo__controls > li {
-    @apply inline-block;
-}
-
-.photo__controls > li + li {
-    @apply ml-1;
-}
-
-.photo__row {
-    @apply block md:flex md:flex-auto bg-none min-h-0 relative z-10 py-0 px-0;
-}
-
-.photo__row.editing {
-    @apply block md:flex md:flex-auto bg-none min-h-0 relative z-10 py-0 px-0 pl-11;
-}
-
-photo__column {
-    @apply px-0.5;
+.photogrid--photo__controls .photo__control, .photogrid--row__controls .row__control {
+    @apply bg-code-dark-gray text-code-green py-0 px-2 rounded
 }
