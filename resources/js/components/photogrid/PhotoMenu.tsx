@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PhotoMenuProps } from '../../types/photo';
 
-const PhotoMenu: React.FC = (props: PhotoMenuProps) => {
+const PhotoMenu = (props: PhotoMenuProps) => {
   return (
     <>
       <div className="absolute top-0 left-0 z-10 p-2 text-left w-full">

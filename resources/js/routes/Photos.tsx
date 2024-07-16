@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto } from '../api/Photo';
-import { PhotoRows } from '../photogrid/types';
-import PhotoGrid from '../photogrid/PhotoGrid';
+import { PhotoGrid, PhotoRows } from 'react-editable-photo-grid';
 import { File } from '../types/photo';
 import { useUser } from '../UserContext';
 import { savingData, modalStyles } from "../utils";
