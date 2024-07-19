@@ -127,6 +127,6 @@ class PhotoController extends Controller
             }
         }
 
-        return response()->json('The photos were displayed!', 200);
+        return response()->json('The photos were deleted!', 200);
     }
 }

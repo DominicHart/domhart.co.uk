@@ -235,7 +235,8 @@ class Photo implements IPhoto
      */
     public function destroyPhoto(string $photoUlid, string &$error) : bool
     {
-        $photo = PhotoModel::findByUuid($photoUlid);
+        $photo = PhotoModel::where('ulid', $photoUlid)
+            ->first();
 
         if (null === $photo) {
             $error = 'Image not found';

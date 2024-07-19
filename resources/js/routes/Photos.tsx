@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto } from '../api/Photo';
+import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto, deletePhotos } from '../api/Photo';
 import { PhotoGrid, PhotoRows } from 'react-editable-photo-grid';
 import { File } from '../types/photo';
 import { useUser } from '../UserContext';
@@ -29,16 +29,22 @@ Modal.setAppElement('#app');
 
 const Photos: React.FC = () => {
   const [photos, setPhotos] = useState<PhotoRows>({}),
+    [loading, setLoading] = useState<boolean>(true),
     [files, setFiles] = useState<File[]>([]),
-    [modalIsOpen, setIsOpen] = useState(false),
-    [selectedPhotos, setSelectedPhotos] = useState([]),
-    [changes, setChanges] = useState(0),
-    [isEditing, setIsEditing] = useState(false),
+    [modalIsOpen, setIsOpen] = useState<boolean>(false),
+    [selectedPhotos, setSelectedPhotos] = useState<Array<string>>([]),
+    [changes, setChanges] = useState<number>(0),
+    [isEditing, setIsEditing] = useState<boolean>(false),
     [activeDropdown, setActiveDropdown] = useState(null);
 
   const user = useUser();
 
   const openModal = () => {
+    if (changes > 0) {
+      Swal.fire('Save Changes', 'Please save your changes before uploading new photos!', 'warning');
+      return;
+    }
+
     setIsOpen(true);
   }
 
@@ -51,7 +57,9 @@ const Photos: React.FC = () => {
   }
 
   const getData = async () => {
-    setPhotos(await getPhotos());
+    const rows = await getPhotos();
+    setPhotos(rows);
+    //setLoading(false);
   }
 
   const saveChanges = (e: any) => {
@@ -72,6 +80,11 @@ const Photos: React.FC = () => {
   }
 
   const uploadPhotos = (e: any) => {
+    if (changes > 0) {
+      Swal.fire('Save Changes', 'Please save your changes before uploading new photos!', 'warning');
+      return;
+    }
+
     e.preventDefault();
 
     if (files.length === 0) {
@@ -188,8 +201,27 @@ const Photos: React.FC = () => {
     });
   }
 
-  const confirmDelete = (e: any) => {
-    //
+  const confirmDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!selectedPhotos.length) {
+      Swal.fire('Select Photos', 'No photos selected!', 'warning');
+      return;
+    }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to delete the selected photos",
+      icon: "warning",
+      showCancelButton: true
+    }).then((willDelete) => {
+      if (willDelete.isConfirmed) {
+        deletePhotos(selectedPhotos).then((result) => {
+          setSelectedPhotos([]);
+          getData();
+        }).catch(() => {
+          Swal.fire('Error', 'An error occurred while deleting photos', 'error');
+        })
+      }
+    })
   }
 
   const updateSelectedPhotos = (e: any) => {
@@ -218,20 +250,31 @@ const Photos: React.FC = () => {
     openFileBrowser={openFileBrowser}
   />
 
+  if (loading) {
+    return <div className="h-screen relative">
+      <div className="relative top-1/2 -translate-y-1/2 text-center w-full">
+        Loading...
+      </div>
+    </div>;
+  }
+
   return (
     <>
       {user &&
         isEditing ?
-        <div className="px-1 text-center mt-1">
-          <button type="button" className="rounded inline-block bg-blue-600 py-1 px-4 font-semibold text-white" onClick={openModal}>Upload Photos</button>
+        <div className="px-1 text-center my-2">
+          <button type="button" className="rounded inline-block bg-blue-500 py-1 px-4 font-semibold text-white" onClick={openModal}>Upload Photos</button>
           {changes > 0 &&
-            <button type="button" className="rounded inline-block bg-green-700 text-white py-1 px-4 font-semibold ml-2" onClick={saveChanges}>Save Changes</button>
+            <button type="button" className="rounded inline-block bg-green-500 text-white py-1 px-4 font-semibold ml-2" onClick={saveChanges}>Save Changes</button>
+          }
+          {selectedPhotos.length > 0 &&
+            <button type="button" className="rounded inline-block bg-red-500 text-white py-1 px-4 font-semibold ml-2" onClick={confirmDelete}>Delete Photos</button>
           }
           <button type="button" className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold ml-2" onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
         :
-        <div className="px-1 text-center mt-1">
-          <button className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold" type="button" onClick={() => setIsEditing(true)}>Edit</button>
+        <div className="px-1 text-center my-2">
+          <button className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold" type="button" onClick={() => setIsEditing(true)}>Edit Photo Grid</button>
         </div>
       }
       <Modal

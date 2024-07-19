@@ -17,3 +17,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, span {
 .photogrid--photo__controls .photo__control, .photogrid--row__controls .row__control {
     @apply bg-code-dark-gray text-code-green py-0 px-2 rounded
 }
+
+.photo__position {
+    @apply rounded !py-1 !px-2 font-semibold !top-2;
+}
