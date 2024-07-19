@@ -37,3 +37,11 @@ export const replacePhoto = async (id: string, formData: FormData): Promise<Phot
 
   return response.data;
 }
+
+export const deletePhotos = async (selectedPhotoIds: Array<string>): Promise<any> => {
+  let formData = new FormData();
+  formData.append('ids', JSON.stringify(selectedPhotoIds));
+
+  const response = await axios.post(`${apiUrl()}/photos/delete/`, formData);
+  return response.data;
+}

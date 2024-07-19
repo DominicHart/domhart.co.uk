@@ -1,4 +1,4 @@
-import { PhotoItem } from '../photogrid/types';
+import { PhotoItem } from 'react-editable-photo-grid';
 
 export interface File {
   size: number;
@@ -24,5 +24,4 @@ export interface PhotoMenuProps {
   activeDropdown: string;
   openDropdown: (e: any) => void;
   openFileBrowser: (e: any) => void;
-  confirmDelete: (e: any) => void;
 }

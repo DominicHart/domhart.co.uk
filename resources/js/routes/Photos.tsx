@@ -216,7 +216,6 @@ const Photos: React.FC = () => {
     activeDropdown={activeDropdown}
     openDropdown={openDropdown}
     openFileBrowser={openFileBrowser}
-    confirmDelete={confirmDelete}
   />
 
   return (
@@ -263,6 +262,8 @@ const Photos: React.FC = () => {
         changes={changes}
         increaseChanges={() => setChanges(changes + 1)}
         photoMenu={photoMenu}
+        imageSrcPrefix="/api/photos/"
+        imageSrcProperty="thumbnail_path"
       />
       <input type="file" className="hidden" id="imageSelection" onChange={updatePhoto} />
     </>

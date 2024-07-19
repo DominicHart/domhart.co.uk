@@ -107,4 +107,26 @@ class PhotoController extends Controller
 
         return response()->json('The photo was replaced!', 200);
     }
+
+    /**
+     * Drstroy photos
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function destroy(Request $request): JsonResponse
+    {
+        $error = '';
+        $photoUlids = json_decode($request->input('ids'));
+
+        foreach ($photoUlids as $photoUlid) {
+            $deleted = $this->_photoService->destroyPhoto($photoUlid, $error);
+
+            if (!$deleted) {
+                return response()->json($error, 400);
+            }
+        }
+
+        return response()->json('The photos were displayed!', 200);
+    }
 }

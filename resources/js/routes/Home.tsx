@@ -29,14 +29,19 @@ const Home: React.FC = () => {
                     <h2 className="text-5xl font-semibold text-center text-gray-800">What I know</h2>
                     <div className="2xl:w-7/12 mx-auto mt-12">
                         <ul className="text-2xl block text-left bg-code-dark-gray text-code-gray p-10 rounded my-6">
-                            <li dangerouslySetInnerHTML={{ __html: '<span class="text-code-blue">cons</span> <span class="text-code-yellow">whatIKnow</span> <span class="text-white">= ()</span> <span class="text-code-blue">=></span> <span class="text-white">{</span>' }} />
-                            <li className="pl-6" dangerouslySetInnerHTML={{ __html: '<span class="text-code-pink">return</span> <span class="text-code-orange">`</span>' }} />
-                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">Here are some of the technologies that I have worked with:</span>' }} />
-                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">PHP | AWS | React JS | Vue JS | SQL | Laravel</span>' }} />
-                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">Magento 2 | Drupal | Azure | Ubuntu | Nginx | Apache2</span>' }} />
-                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">And a lot more.</span>' }} />
-                            <li className="pl-6" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">`</span></span><span class="text-white">;</span>' }} />
-                            <li dangerouslySetInnerHTML={{ __html: '<span class="text-white">}</span>' }} />
+                            <li dangerouslySetInnerHTML={{ __html: '<span class="text-code-blue">&#8249;?php</span>' }} />
+                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '<span class="text-code-blue">namespace</span> <span class="text-code-green">App\\Home</span><span class="text-white">;</span> ' }} />
+                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '<span class="text-code-blue">class</span> <span class="text-code-green">WhatIKnow</span>  ' }} />
+                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '<span class="text-white">{</span> ' }} />
+                            <li className="pl-20" dangerouslySetInnerHTML={{ __html: '<span class="text-code-blue">public function</span> <span class="text-code-yellow">show()</span> <span class="text-white">{</span>' }} />
+                            <li className="pl-28" dangerouslySetInnerHTML={{ __html: '<span class="text-code-pink">return <span class="text-code-orange">"</span>' }} />
+                            <li className="pl-36" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">PHP | AWS | React JS | Vue JS | SQL | Laravel</span>' }} />
+                            <li className="pl-36" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">Magento 2 | Drupal | Azure | Ubuntu | Nginx | Apache2</span>' }} />
+                            <li className="pl-36" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">And a lot more.</span>' }} />
+                            <li className="pl-28" dangerouslySetInnerHTML={{ __html: '<span class="text-code-orange">"</span></span><span class="text-white">;</span>' }} />
+                            <li className="pl-20" dangerouslySetInnerHTML={{ __html: '</span><span class="text-white">}</span>' }} />
+                            <li className="pl-12" dangerouslySetInnerHTML={{ __html: '</span><span class="text-white">}</span>' }} />
+                            <li dangerouslySetInnerHTML={{ __html: '<span class="text-code-blue">?&#8250;</span>' }} />
                         </ul>
                     </div>
                 </div>

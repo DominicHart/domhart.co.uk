@@ -37,14 +37,6 @@ const PhotoMenu = (props: PhotoMenuProps) => {
               Replace
               </a>
           </li>
-          <li>
-            <a
-              className="block text-gray-900 font-medium text-sm py-2 px-4 hover:bg-gray-200 active:bg-gray-200 focus:bg-gray-200" 
-              href={props.photo.id} 
-              onClick={props.confirmDelete}>
-              Delete
-            </a>
-          </li>
         </ul>
       </div>
     </>
