@@ -41,6 +41,27 @@ class AuthController extends Controller
         return response()->json('Incorrect email or password', 400);
     }
 
+    /**
+     * Logs a user out
+     *
+     * @return JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
+        if (!Auth::user()) {
+            return response()->json('You are not authorised to perform this action.', 401);
+        }
+
+        Auth::user()->tokens()->delete();
+
+        return response()->json('logged_out', 200);
+    }
+
+    /**
+     * Get user from session
+     *
+     * @return JsonResponse
+     */
     public function authCheck(): JsonResponse
     {
         if (!Auth::user()) {

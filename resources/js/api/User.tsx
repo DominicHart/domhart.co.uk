@@ -12,3 +12,8 @@ export const authCheck = async(): Promise<UserData | null> => {
   
   return null;
 }
+
+export const logout = async(): Promise<any> => {
+  const response = await axios.get(apiUrl() + '/logout', getHeaders());
+  return response.data;
+}

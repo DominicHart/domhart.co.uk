@@ -1,29 +1,34 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../UserContext';
+import { logout } from '../api/User';
 
 const Nav: React.FC = () => {
   const [navOpen, setNavOpen] = useState<boolean>(false),
     navigate = useNavigate();
   const user = useUser();
 
-  const logout = (e) => {
+  const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Remove token
-    // Api call
+    logout().then(() => {
+      localStorage.removeItem('token');
+      location.href = '/';
+    }).catch(() => {
+      console.log('An error occurred while logging out');
+    })
   }
 
   const toggleMobileNav = (e: React.MouseEvent<HTMLButtonElement>) => {
     setNavOpen(prevNavOpen => !prevNavOpen);
   }
-  
+
   const goToLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute('href');
     setNavOpen(false);
     navigate(href);
   }
 
-  let logoutLink = <button type="button" onClick={logout} className="text-code-yellow">Logout();</button>;
+  let logoutLink = <button type="button" onClick={handleLogout} className="text-code-yellow">Logout();</button>;
 
   return (
     <div>
