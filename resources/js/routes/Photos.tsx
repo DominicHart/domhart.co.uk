@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto, deletePhotos } from '../api/Photo';
-import { PhotoGrid, PhotoRows } from 'react-editable-photo-grid';
+import { PhotoGrid, PhotoItem, PhotoRows, sortPhotosIntoRows } from 'react-editable-photo-grid';
 import { File } from '../types/photo';
 import { useUser } from '../UserContext';
 import { savingData } from "../utils";
@@ -28,7 +28,8 @@ const customStyles = {
 Modal.setAppElement('#app');
 
 const Photos: React.FC = () => {
-  const [photos, setPhotos] = useState<PhotoRows>({}),
+  const [photos, setPhotos] = useState<PhotoItem[]>([]),
+    [rows, setRows] = useState<PhotoRows[]>([]),
     [loading, setLoading] = useState<boolean>(true),
     [files, setFiles] = useState<File[]>([]),
     [modalIsOpen, setIsOpen] = useState<boolean>(false),
@@ -57,8 +58,9 @@ const Photos: React.FC = () => {
   }
 
   const getData = async () => {
-    const rows = await getPhotos();
-    setPhotos(rows);
+    const photos = await getPhotos();
+    setPhotos(photos);
+    setRows(sortPhotosIntoRows(photos));
     setLoading(false);
   }
 
@@ -302,8 +304,9 @@ const Photos: React.FC = () => {
       </Modal>
       <PhotoGrid
         isEditing={isEditing && user !== null}
-        rows={photos}
-        updateRows={setPhotos}
+        photos={photos}
+        rows={rows}
+        updateRows={setRows}
         selectedPhotos={selectedPhotos}
         updateSelectedPhotos={setSelectedPhotos}
         changes={changes}

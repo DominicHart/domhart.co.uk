@@ -32,14 +32,13 @@ class Photo implements IPhoto
      */
     public function getPhotosForGrid() : array
     {
-        $photos = PhotoModel::all();
-        $photoRows = [];
-        $count = 0;
+        $photos = PhotoModel::orderBy('row')
+            ->orderBy('column')
+            ->get();
+            
+        $photosArray = [];
 
         foreach ($photos as $photo) {
-            $count++;
-            $key = intval($photo->row);
-
             if ($photo->thumbnail_path) {
                 $path = storage_path('app/photos/' . $photo->thumbnail_path);
 
@@ -52,18 +51,18 @@ class Photo implements IPhoto
                 }
             }
 
-            $photoRows[$key][] = [
+            $photosArray[] = [
                 'id' => $photo->ulid,
                 'column' => $photo->column,
+                'row' => $photo->row,
                 'image_path' => $photo->image_path,
                 'thumbnail_path' => $photo->thumbnail_path,
-                'gallery_key' => $count,
                 'width' => $sizeMeta[0] ?? 0,
                 'height' => $sizeMeta[1] ?? 0
             ];
         }
 
-        return $photoRows;
+        return $photosArray;
     }
 
     /**
