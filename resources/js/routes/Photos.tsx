@@ -29,7 +29,7 @@ Modal.setAppElement('#app');
 
 const Photos: React.FC = () => {
   const [photos, setPhotos] = useState<PhotoItem[]>([]),
-    [rows, setRows] = useState<PhotoRows[]>([]),
+    [rows, setRows] = useState<PhotoRows>([]),
     [loading, setLoading] = useState<boolean>(true),
     [files, setFiles] = useState<File[]>([]),
     [modalIsOpen, setIsOpen] = useState<boolean>(false),
