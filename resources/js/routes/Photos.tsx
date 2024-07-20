@@ -311,6 +311,8 @@ const Photos: React.FC = () => {
         photoMenu={photoMenu}
         imageSrcPrefix="/api/photos/"
         imageSrcProperty="thumbnail_path"
+        useGallery={true}
+        gallerySrcProperty="image_path"
       />
       <input type="file" className="hidden" id="imageSelection" onChange={updatePhoto} />
     </div>

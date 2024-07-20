@@ -57,7 +57,7 @@ class Photo implements IPhoto
                 'column' => $photo->column,
                 'image_path' => $photo->image_path,
                 'thumbnail_path' => $photo->thumbnail_path,
-                'carousel_key' => $count,
+                'gallery_key' => $count,
                 'width' => $sizeMeta[0] ?? 0,
                 'height' => $sizeMeta[1] ?? 0
             ];
