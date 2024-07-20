@@ -31,7 +31,7 @@ const Portfolio: React.FC = () => {
               <img src="../../images/portfolio/domhart/photos.jpg" alt="photos" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
             <div>
-              <img src="../../images/portfolio/domhart/contact.jpg" alt="contact form" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
+              <img src="../../images/portfolio/domhart/getintouch.jpg" alt="contact" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
           </div>
         </div>
