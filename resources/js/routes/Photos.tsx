@@ -259,7 +259,7 @@ const Photos: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="min-h-[calc(100vh-112px)]">
       <div className="py-10 px-6">
         <h1 className="text-5xl md:text-center font-semibold text-gray-800">Photos</h1>
         <p className="md:text-center md:w-8/12 mx-auto mt-4 text-lg">In my free time I like to practice photography. My favourite theme is Zoo Animals but I've also explored Macro and Wildlife. Below is a small collection of my favourite photos.</p>

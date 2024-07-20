@@ -63,6 +63,8 @@ class Photo implements IPhoto
             ];
         }
 
+        return [];
+
         return $photoRows;
     }
 
