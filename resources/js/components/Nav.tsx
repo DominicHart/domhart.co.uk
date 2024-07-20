@@ -1,8 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../UserContext';
 
 const Nav: React.FC = () => {
+  const [navOpen, setNavOpen] = useState<boolean>(false),
+    navigate = useNavigate();
   const user = useUser();
 
   const logout = (e) => {
@@ -11,30 +13,72 @@ const Nav: React.FC = () => {
     // Api call
   }
 
-  let logoutLink = null;
-
-  if (user) {
-    logoutLink = <button type="button" onClick={logout} className="text-code-yellow absolute right-8 top-1/2 -translate-y-1/2">Logout();</button>;
+  const toggleMobileNav = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setNavOpen(prevNavOpen => !prevNavOpen);
+  }
+  
+  const goToLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const href = e.currentTarget.getAttribute('href');
+    setNavOpen(false);
+    navigate(href);
   }
 
+  let logoutLink = <button type="button" onClick={logout} className="text-code-yellow">Logout();</button>;
+
   return (
-    <nav className="bg-code-dark-gray w-full p-4 h-28 relative text-center">
-      <h1 className="block font-semibold text-2xl w-18 absolute z-5 left-8 top-1/2 -translate-y-1/2 text-code-blue">
-        <Link to="/">Dom Hart</Link>
-      </h1>
-      <ul className="inline-block relative top-1/2 -translate-y-1/2 text-center p-0 text-md font-medium text-code-green">
-        <li className="inline-block">
-          <Link className="block py-4 hover:text-white" to="/">Home.tsx</Link>
-        </li>
-        <li className="inline-block ml-8">
-          <Link className="block py-4" to="/photos">Photos.tsx</Link>
-        </li>
-        <li className="inline-block ml-8">
-          <Link className="block py-4" to="/contact">Contact.tsx</Link>
-        </li>
-      </ul>
-      {logoutLink}
-    </nav>
+    <div>
+      <nav className="bg-code-dark-gray w-full p-4 h-28 relative text-center h-[112px]">
+        {!navOpen &&
+          <button type="button" onClick={toggleMobileNav} className="block md:hidden absolute right-8 top-11 text-code-yellow">OpenNav();</button>
+        }
+        <h1 className="block font-semibold text-2xl w-18 absolute z-5 left-8 top-1/2 -translate-y-1/2 text-code-blue">
+          <Link to="/">Dom Hart</Link>
+        </h1>
+        <ul className="hidden md:inline-block relative top-1/2 -translate-y-1/2 text-center p-0 text-md font-medium text-code-green">
+          <li className="inline-block">
+            <Link className="block py-4 hover:text-white" to="/">Home.tsx</Link>
+          </li>
+          <li className="inline-block ml-8">
+            <Link className="block py-4 hover:text-white" to="/portfolio">Portfolio.tsx</Link>
+          </li>
+          <li className="inline-block ml-8">
+            <Link className="block py-4 hover:text-white" to="/photos">Photos.tsx</Link>
+          </li>
+          <li className="inline-block ml-8">
+            <Link className="block py-4 hover:text-white" to="/contact">Contact.tsx</Link>
+          </li>
+        </ul>
+        {user &&
+          <div className="hidden md:block absolute right-8 top-1/2 -translate-y-1/2">
+            {logoutLink}
+          </div>
+        }
+      </nav>
+      {navOpen &&
+        <nav className="block md:hidden bg-code-dark-gray w-full fixed z-50 left-0 top-[112px] px-8 h-full">
+          <button type="button" onClick={toggleMobileNav} className="block md:hidden absolute right-8 top-[-70px] text-code-yellow">CloseNav();</button>
+          <ul className="text-left text-md font-medium text-code-green">
+            <li className="inline-block">
+              <Link className="block py-4 hover:text-white" onClick={goToLink} to="/">Home.tsx</Link>
+            </li>
+            <li className="block mt-4">
+              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/portfolio">Portfolio.tsx</Link>
+            </li>
+            <li className="block mt-4">
+              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/photos">Photos.tsx</Link>
+            </li>
+            <li className="block mt-4">
+              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/contact">Contact.tsx</Link>
+            </li>
+            {user &&
+              <li className="block mt-6">
+                {logoutLink}
+              </li>
+            }
+          </ul>
+        </nav>
+      }
+    </div>
   );
 };
 

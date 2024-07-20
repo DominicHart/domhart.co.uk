@@ -21,6 +21,8 @@ const Contact: React.FC = () => {
   } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    data.full_name = document.getElementById('full_name').value;
+    data.email_address = document.getElementById('email_address').value;
     axios.post(`${apiUrl()}/contact`, data)
       .then((response) => {
         if (response.status === 200) {
@@ -29,22 +31,27 @@ const Contact: React.FC = () => {
         } else {
           setMessage({ type: 'error', message: 'An error occurred while sending your message.' });
         }
-      }).catch((error) => {
+      }).catch(() => {
         setMessage({ type: 'error', message: 'An error occurred while sending your message.' });
       });
   }
 
   return (
-    <div className="py-20 px-8 relative">
-      <h1 className="text-5xl font-semibold text-center text-gray-800">Get in touch</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="2xl:w-6/12 mx-auto mt-10 bg-gray-200 p-12 rounded" autoComplete="off">
+    <div className="py-6 md:py-20 px-6 md:px-8 relative">
+      <h1 className="text-3xl md:text-5xl font-semibold text-center text-gray-800">Get in touch</h1>
+      <form onSubmit={handleSubmit(onSubmit)} method="POST" action="/api/contact" className="2xl:w-6/12 mx-auto mt-6 md:mt-10 bg-gray-200 p-6 md:p-12 rounded" autoComplete="off">
         {message.message.length > 0 &&
           <div className="text-center rounded font-medium text-2xl w-full text-white mb-6">
             <span className={message.type === 'success' ? 'text-green-600' : 'text-red-600'}>{message.message}</span>
           </div>
         }
         <div>
-          <label htmlFor="name" className="font-medium">Name</label>
+          <label
+            htmlFor="name"
+            className="font-medium"
+          >
+            Name
+          </label>
           <input
             type="text"
             id="name"
@@ -59,6 +66,14 @@ const Contact: React.FC = () => {
               })}
             className="mt-2 outline-none bg-white block w-full text-code-gray min-h-8 p-3 text-xl" />
           {errors.name && <span className="text-red-600 font-medium block mt-1">This field is required</span>}
+        </div>
+        <div className="hidden">
+          <label htmlFor="full_name">Full Name</label>
+          <input
+            type="text"
+            id="full_name"
+            name="full_name"
+          />
         </div>
         <div className="mt-6">
           <label htmlFor="email" className="font-medium">Email</label>
@@ -80,6 +95,14 @@ const Contact: React.FC = () => {
               })} className="mt-2 outline-none bg-white block w-full text-code-gray min-h-8 p-3 text-xl" />
           {errors.email && <span className="text-red-600 font-medium block mt-1">This field is required</span>}
         </div>
+        <div className="hidden">
+          <label htmlFor="email_address">Email Address</label>
+          <input
+            type="email"
+            id="email_address"
+            name="email_address"
+          />
+        </div>
         <div className="mt-6">
           <label htmlFor="subject" className="font-medium">Subject</label>
           <input
@@ -94,7 +117,8 @@ const Contact: React.FC = () => {
                 maxLength: 255,
                 minLength: 3
               })}
-            className="mt-2 outline-none bg-white block w-full text-code-gray min-h-8 p-3 text-xl" />
+            className="mt-2 outline-none bg-white block w-full text-code-gray min-h-8 p-3 text-xl"
+          />
           {errors.subject && <span className="text-red-600 font-medium block mt-1">This field is required</span>}
         </div>
         <div className="mt-6">
@@ -112,7 +136,8 @@ const Contact: React.FC = () => {
                 maxLength: 1000,
                 minLength: 20
               })}
-            className="mt-2 bg-white outline-none block w-full text-code-gray min-h-8 p-3 text-xl" />
+            className="mt-2 bg-white outline-none block w-full text-code-gray min-h-8 p-3 text-xl"
+          />
           {errors.message && <span className="text-red-600 font-medium block mt-1">This field is required</span>}
         </div>
         <div className="mt-6 text-right">

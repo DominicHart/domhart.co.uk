@@ -3,7 +3,7 @@ import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto, deletePhotos 
 import { PhotoGrid, PhotoRows } from 'react-editable-photo-grid';
 import { File } from '../types/photo';
 import { useUser } from '../UserContext';
-import { savingData, modalStyles } from "../utils";
+import { savingData } from "../utils";
 import Swal from "sweetalert2";
 import Modal from 'react-modal';
 import ModalHeader from '../components/modal/ModalHeader';
@@ -59,7 +59,7 @@ const Photos: React.FC = () => {
   const getData = async () => {
     const rows = await getPhotos();
     setPhotos(rows);
-    //setLoading(false);
+    setLoading(false);
   }
 
   const saveChanges = (e: any) => {
@@ -251,16 +251,20 @@ const Photos: React.FC = () => {
   />
 
   if (loading) {
-    return <div className="h-screen relative">
+    return <div className="h-[calc(100vh-112px)] relative">
       <div className="relative top-1/2 -translate-y-1/2 text-center w-full">
-        Loading...
+        <img src="../../images/loader.gif" alt="Loading" className="max-w-full w-[200px] h-auto inline-block" width="200" />
       </div>
     </div>;
   }
 
   return (
-    <>
-      {user &&
+    <div>
+      <div className="py-10 px-6">
+        <h1 className="text-5xl md:text-center font-semibold text-gray-800">Photos</h1>
+        <p className="md:text-center md:w-8/12 mx-auto mt-4 text-lg">In my free time I like to practice photography. My favourite theme is Zoo Animals but I've also explored Macro and Wildlife. Below is a small collection of my favourite photos.</p>
+      </div>
+      {user ?
         isEditing ?
         <div className="px-1 text-center my-2">
           <button type="button" className="rounded inline-block bg-blue-500 py-1 px-4 font-semibold text-white" onClick={openModal}>Upload Photos</button>
@@ -272,10 +276,10 @@ const Photos: React.FC = () => {
           }
           <button type="button" className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold ml-2" onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
-        :
+        : 
         <div className="px-1 text-center my-2">
           <button className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold" type="button" onClick={() => setIsEditing(true)}>Edit Photo Grid</button>
-        </div>
+        </div> : <div className="h-0.5" />
       }
       <Modal
         isOpen={modalIsOpen}
@@ -309,7 +313,7 @@ const Photos: React.FC = () => {
         imageSrcProperty="thumbnail_path"
       />
       <input type="file" className="hidden" id="imageSelection" onChange={updatePhoto} />
-    </>
+    </div>
   );
 };
 
