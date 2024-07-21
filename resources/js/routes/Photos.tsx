@@ -199,6 +199,11 @@ const Photos: React.FC = () => {
   }
 
   const confirmDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (changes > 0) {
+      Swal.fire('Save Changes', 'You have unsaved changes that will be lost, please save them before you continue', 'warning');
+      return;
+    }
+    
     if (!selectedPhotos.length) {
       Swal.fire('Select Photos', 'No photos selected!', 'warning');
       return;
@@ -261,7 +266,7 @@ const Photos: React.FC = () => {
         <h1 className="text-5xl md:text-center font-semibold text-gray-800">Photos</h1>
         <p className="md:text-center md:w-8/12 mx-auto mt-4 text-lg">In my free time I like to practice photography. My favourite theme is Zoo Animals but I've also explored Macro and Wildlife. Below is a small collection of my favourite photos.</p>
       </div>
-      {user ?
+      {user.user ?
         isEditing ?
           <div className="px-1 text-center my-2">
             <button type="button" className="rounded inline-block bg-blue-500 py-1 px-4 font-semibold text-white" onClick={openModal}>Upload Photos</button>
@@ -298,7 +303,7 @@ const Photos: React.FC = () => {
         </div>
       </Modal>
       <PhotoGrid
-        isEditing={isEditing && user !== null}
+        isEditing={isEditing && user.user !== null}
         photos={photos}
         rows={rows}
         updateRows={setRows}

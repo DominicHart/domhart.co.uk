@@ -15,5 +15,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('photos/save-positions', [PhotoController::class, 'savePhotoPositions']);
     Route::post('photos/delete', [PhotoController::class, 'destroy']);
 });
-
-

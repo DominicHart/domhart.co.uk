@@ -53,7 +53,7 @@ const Nav: React.FC = () => {
             <Link className="block py-4 hover:text-white" to="/contact">Contact.tsx</Link>
           </li>
         </ul>
-        {user &&
+        {user.user &&
           <div className="hidden md:block absolute right-8 top-1/2 -translate-y-1/2">
             {logoutLink}
           </div>

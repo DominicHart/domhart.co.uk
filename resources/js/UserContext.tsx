@@ -2,19 +2,26 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import { authCheck } from "./api/User";
 import { UserData } from './types/user';
 
-const UserContext = createContext();
+interface UserContextProps {
+  user: UserData | null;
+  loading: boolean;
+  error: any;
+}
+
+const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<UserData | null>(null),
+  const [user, setUser] = useState(null),
     [loading, setLoading] = useState(true),
     [error, setError] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const user = await authCheck();
-        setUser(user);
+        const authUser = await authCheck();
+        setUser(authUser);
       } catch (err) {
+        setError(err);
         localStorage.removeItem('token');
       } finally {
         setLoading(false);
@@ -25,12 +32,16 @@ export const UserProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={ user }>
-    {children}
-  </UserContext.Provider>
+    <UserContext.Provider value={{ user, loading, error }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 
-export const useUser = () => {
-  return useContext(UserContext);
+export const useUser = (): UserContextProps => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+  return context;
 };

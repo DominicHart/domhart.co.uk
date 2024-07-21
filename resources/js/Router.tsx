@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Home from "./routes/Home";
 import Contact from "./routes/ContactNoForm";
 import Login from "./routes/Login";
@@ -36,6 +36,10 @@ const routes = [
   {
     path: '/',
     element: <Home />,
+  },
+  {
+    path: '*',
+    element: <Navigate to="/" />,
   },
 ];
 
