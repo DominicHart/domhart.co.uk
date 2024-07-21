@@ -1,21 +1,16 @@
 import React from 'react';
 
 import { PhotoMenuProps } from '../../types/photo';
+import { Checkbox } from 'react-editable-photo-grid';
 
 const PhotoMenu = (props: PhotoMenuProps) => {
   return (
     <>
-      <div className="absolute top-0 left-0 z-10 p-2 text-left w-full">
-        <div>
-          <input
-            type="checkbox"
-            className="inline-block"
-            value={props.photo.id}
-            checked={props.selectedPhotos.includes(props.photo.id)}
-            onChange={props.updateSelectedPhotos}
-          />
-        </div>
-      </div>
+      <Checkbox
+        value={props.photo.id}
+        onClick={props.updateSelectedPhotos}
+        checked={props.selectedPhotos.includes(props.photo.id)}
+      />
       <div className="absolute z-20 top-2.5 right-2.5">
         <button
           className="border-none rounded text-gray-900 py-1 px-4 bg-gray-200 font-bold"

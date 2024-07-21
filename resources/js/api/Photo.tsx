@@ -15,12 +15,6 @@ const buildHeaders = () => {
   return headers;
 }
 
-export const uploadPhoto = async (formData: FormData): Promise<ImageUploadedResponse> => {
-  const response = await axios.post(`${apiUrl()}/photos`, formData, buildHeaders());
-
-  return response.data;
-}
-
 export const savePhotoPositions = async (formData: FormData): Promise<PhotoPositionsSavedResponse> => {
   const response = await axios.post(`${apiUrl()}/photos/save-positions`, formData, buildHeaders());
 
@@ -39,4 +33,23 @@ export const deletePhotos = async (selectedPhotoIds: Array<string>): Promise<any
 
   const response = await axios.post(`${apiUrl()}/photos/delete/`, formData, getHeaders());
   return response.data;
+}
+
+export const uploadPhoto = async (
+  row: number,
+  column: number,
+  file: any,
+): Promise<boolean> => {
+  const fd = new FormData()
+  fd.append('row', row)
+  fd.append('column', column)
+  fd.append('photos[]', file);
+
+  try {
+    await axios.post(`${apiUrl()}/photos`, fd, buildHeaders());
+    return true;
+  } catch (error) {
+    console.error('Upload failed:', error);
+    return false;
+  }
 }

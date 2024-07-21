@@ -81,81 +81,72 @@ const Photos: React.FC = () => {
     });
   }
 
-  const uploadPhotos = (e: any) => {
-    if (changes > 0) {
-      Swal.fire('Save Changes', 'Please save your changes before uploading new photos!', 'warning');
-      return;
-    }
-
-    e.preventDefault();
-
-    if (files.length === 0) {
-      Swal.fire('Select Photos', 'You haven\'t selected any photos!', 'warning');
-      return;
-    }
-
-    savingData('Photos');
-
-    let totalFileSize = 0;
-
-    for (const file of files) {
-      totalFileSize += file.size
-    }
+  const processPhotos = async () => {
+    let totalFileSize = files.reduce((total, file) => total + file.size, 0);
 
     if (totalFileSize > 500000000) {
       Swal.fire('Exceeded 500MB', 'The selected files exceed the maximum size limit of 500MB', 'warning')
       return;
     }
 
-    let uploaded = 0,
-      failedToUpload = [] as File[],
-      row = Object.keys(photos).length + 1 as number,
-      column = 0 as number;
+    Swal.fire({
+      title: 'Uploading Photos',
+      html: `<div>Uploading photo <span id="uploadProgress">0</span>/${files.length}...</div>`,
+      icon: 'info',
+      showCancelButton: false,
+      showConfirmButton: false,
+      allowOutsideClick: false
+    });
 
-    const promises = [];
+    let failedToUpload = [],
+      row = Object.keys(rows).length + 1,
+      column = 0,
+      processed = 0;
 
-    for (let i = 0; i < files.length; i++) {
-      promises.push(new Promise(resolve => {
-        if (i > 0 && i % 3 === 0) {
-          row++;
-          column = 1;
-        } else {
-          column++
+    for (const file of files) {
+      document.getElementById('uploadProgress').innerHTML = (processed + 1);
+
+      if (processed > 0 && processed % 3 === 0) {
+        row++;
+        column = 1;
+      } else {
+        column++
+      }
+
+      try {
+        const response = await uploadPhoto(row, column, file);
+        if (!response) {
+          failedToUpload.push(file);
         }
+      } catch {
+        failedToUpload.push(file);
+      }
 
-        let fd = new FormData()
-        fd.append('row', row.toString())
-        fd.append('column', column.toString())
-        fd.append('photos[]', files[i]);
-
-        uploadPhoto(fd).then((response) => {
-          if (!response) {
-            resolve(failedToUpload.push(files[i]))
-          } else {
-            resolve(uploaded++)
-          }
-        });
-      }))
+      processed++;
     }
 
-    Promise.all(promises)
-      .then(result => {
-        if (uploaded === files.length) {
-          Swal.fire('Photos Uploaded', 'All Photos were successfully uploaded!', 'success')
-          getData();
-          setFiles([]);
-          closeModal();
-          return;
-        }
+    return failedToUpload;
+  }
 
-        setFiles(failedToUpload);
+  const uploadPhotos = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const failedToUpload = await processPhotos();
 
-        Swal.fire({
-          title: 'Oops!',
-          text: 'The remaining files failed to upload!',
-          icon: 'error'
-        })
-      })
+    if (failedToUpload.length > 0) {
+      setFiles(failedToUpload);
+
+      Swal.fire({
+        title: 'Oops!',
+        text: 'The remaining files failed to upload!',
+        icon: 'error'
+      });
+
+      return;
+    }
+
+    closeModal();
+    Swal.fire('Photos Uploaded', 'All Photos were successfully uploaded!', 'success');
+    getData();
   }
 
   const openDropdown = (e: any) => {
@@ -168,10 +159,14 @@ const Photos: React.FC = () => {
     }
   }
 
-  const openFileBrowser = (e: Event) => {
+  const openFileBrowser = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const fileBrowser = document.getElementById('imageSelection'),
-      id = e.target.getAttribute('href');
+      id = e.currentTarget.getAttribute('href');
+
+    if (!id) {
+      throw new TypeError('id missing!');
+    }
 
     if (fileBrowser) {
       fileBrowser.dataset.id = id;
@@ -226,14 +221,14 @@ const Photos: React.FC = () => {
     })
   }
 
-  const updateSelectedPhotos = (e: any) => {
+  const updateSelectedPhotos = (value: string, checked: boolean): void => {
     let newSelectedPhotos = [...selectedPhotos];
 
-    if (e.target.checked) {
-      newSelectedPhotos.push(e.target.value);
+    if (checked) {
+      newSelectedPhotos.push(value);
     } else {
       newSelectedPhotos = newSelectedPhotos.filter(function (item) {
-        return item !== e.target.value;
+        return item !== value;
       })
     }
 
@@ -268,20 +263,20 @@ const Photos: React.FC = () => {
       </div>
       {user ?
         isEditing ?
-        <div className="px-1 text-center my-2">
-          <button type="button" className="rounded inline-block bg-blue-500 py-1 px-4 font-semibold text-white" onClick={openModal}>Upload Photos</button>
-          {changes > 0 &&
-            <button type="button" className="rounded inline-block bg-green-500 text-white py-1 px-4 font-semibold ml-2" onClick={saveChanges}>Save Changes</button>
-          }
-          {selectedPhotos.length > 0 &&
-            <button type="button" className="rounded inline-block bg-red-500 text-white py-1 px-4 font-semibold ml-2" onClick={confirmDelete}>Delete Photos</button>
-          }
-          <button type="button" className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold ml-2" onClick={() => setIsEditing(false)}>Cancel</button>
-        </div>
-        : 
-        <div className="px-1 text-center my-2">
-          <button className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold" type="button" onClick={() => setIsEditing(true)}>Edit Photo Grid</button>
-        </div> : <div className="h-0.5" />
+          <div className="px-1 text-center my-2">
+            <button type="button" className="rounded inline-block bg-blue-500 py-1 px-4 font-semibold text-white" onClick={openModal}>Upload Photos</button>
+            {changes > 0 &&
+              <button type="button" className="rounded inline-block bg-green-500 text-white py-1 px-4 font-semibold ml-2" onClick={saveChanges}>Save Changes</button>
+            }
+            {selectedPhotos.length > 0 &&
+              <button type="button" className="rounded inline-block bg-red-500 text-white py-1 px-4 font-semibold ml-2" onClick={confirmDelete}>Delete Photos</button>
+            }
+            <button type="button" className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold ml-2" onClick={() => setIsEditing(false)}>Cancel</button>
+          </div>
+          :
+          <div className="px-1 text-center my-2">
+            <button className="rounded inline-block bg-gray-200 py-1 px-4 font-semibold" type="button" onClick={() => setIsEditing(true)}>Edit Photo Grid</button>
+          </div> : <div className="h-0.5" />
       }
       <Modal
         isOpen={modalIsOpen}

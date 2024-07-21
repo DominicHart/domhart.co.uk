@@ -29,3 +29,7 @@ h1, h2, h3, h4, h5, h6, p, a, button, span {
 .photo__position {
     @apply rounded !py-1 !px-2 font-semibold !top-2;
 }
+
+.photogrid--checkbox {
+    @apply rounded;
+ }
