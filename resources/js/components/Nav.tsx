@@ -32,7 +32,7 @@ const Nav: React.FC = () => {
 
   return (
     <div>
-      <nav className="bg-code-dark-gray w-full p-4 h-28 relative text-center h-[112px]">
+      <nav className="fixed top-0 left-0 md:relative bg-code-dark-gray w-full p-4 h-28 z-20 text-center h-[112px]">
         {!navOpen &&
           <button type="button" onClick={toggleMobileNav} className="block md:hidden absolute right-8 top-11 text-code-yellow">OpenNav();</button>
         }
