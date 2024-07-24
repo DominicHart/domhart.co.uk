@@ -11,7 +11,9 @@ import Footer from './components/Footer';
 const AppLayout = ({ children }: { children: React.ReactNode }) => (
   <>
     <Nav />
-    {children}
+    <div className="pt-[112px] md:pt-0">
+      {children}
+    </div>
     <Footer />
   </>
 );

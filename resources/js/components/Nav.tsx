@@ -75,7 +75,7 @@ const Nav: React.FC = () => {
             <li className="block mt-4">
               <Link className="block py-2 hover:text-white" onClick={goToLink} to="/contact">Contact.tsx</Link>
             </li>
-            {user &&
+            {user.user &&
               <li className="block mt-6">
                 {logoutLink}
               </li>
