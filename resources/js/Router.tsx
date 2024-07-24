@@ -7,6 +7,7 @@ import Photos from "./routes/Photos";
 import Portfolio from "./routes/Portfolio";
 import Nav from './components/Nav';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => (
   <>
@@ -51,7 +52,11 @@ const router = createBrowserRouter(routes.map(route => ({
 })));
 
 const Router: React.FC = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <RouterProvider router={router}>
+      <ScrollToTop />
+    </RouterProvider>
+  );
 }
 
 export default Router;
