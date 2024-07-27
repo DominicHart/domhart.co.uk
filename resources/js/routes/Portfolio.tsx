@@ -15,7 +15,7 @@ const Portfolio: React.FC = () => {
           <p className="mt-3 text-lg">
             domhart.co.uk is my personal portfolio.
             This website introduces me, showcases who I am and what I do.
-            It includes examples of what I have achieved, a sample of the photos I take in my free time and a basic contact page.
+            It includes examples of what I have achieved, a sample of the photos I take in my free time and a basic about page.
             This app is built using&nbsp;
             <a className="text-blue-600 font-semibold" href="https://laravel.com/docs/11.x/releases">Laravel 11</a> |&nbsp;
             <a className="text-blue-600 font-semibold" href="https://www.w3schools.com/css/css_intro.asp">CSS</a> |&nbsp;
@@ -38,9 +38,9 @@ const Portfolio: React.FC = () => {
             </div>
             <div className="relative portfolio__item">
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-white py-2 px-4 font-semibold rounded bg-[rgba(0,0,0,0.65)]">
-                Contact Page
+                About Page
               </div>
-              <img src="../../images/portfolio/domhart/getintouch.jpg" alt="contact" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
+              <img src="../../images/portfolio/domhart/about.jpg" alt="contact" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ const Portfolio: React.FC = () => {
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-white py-2 px-4 font-semibold rounded bg-[rgba(0,0,0,0.65)]">
                 Stats
               </div>
-              <img src="../../images/portfolio/ceireburbidge/stats.jpg" alt="homepage" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
+              <img src="../../images/portfolio/ceireburbidge/statistics.jpg" alt="homepage" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
           </div>
         </div>
