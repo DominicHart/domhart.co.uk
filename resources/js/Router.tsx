@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Home from "./routes/Home";
-import Contact from "./routes/ContactNoForm";
+import About from "./routes/About";
 import Login from "./routes/Login";
 import Photos from "./routes/Photos";
 import Portfolio from "./routes/Portfolio";
@@ -25,8 +25,8 @@ const routes = [
     element: <Login />,
   },
   {
-    path: '/contact',
-    element: <Contact />,
+    path: '/about',
+    element: <About />,
   },
   {
     path: '/photos',

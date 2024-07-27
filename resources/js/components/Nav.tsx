@@ -50,7 +50,7 @@ const Nav: React.FC = () => {
             <Link className="block py-4 hover:text-white" to="/photos">Photos.tsx</Link>
           </li>
           <li className="inline-block ml-4 lg:ml-8">
-            <Link className="block py-4 hover:text-white" to="/contact">Contact.tsx</Link>
+            <Link className="block py-4 hover:text-white" to="/about">About.tsx</Link>
           </li>
         </ul>
         {user.user &&
