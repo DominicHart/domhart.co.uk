@@ -3,80 +3,69 @@ import React from 'react';
 const About: React.FC = () => {
   return (
     <div>
-      <div className="py-10 md:py-20">
+      <div className="py-10">
         <div className="px-6">
           <h2 className="text-3xl md:text-5xl md:text-center font-semibold text-gray-800">Experience</h2>
           <p className="md:text-center md:w-8/12 mx-auto mt-4 text-lg">Here is a summary of my professional career so far.</p>
         </div>
-        <div className="bg-gray-100 py-3 md:py-6 px-6 mt-12 md:px-8 md:w-10/12 md:mx-auto relative">
+        <div className="bg-gray-100 py-3 md:py-10 px-6 mt-12 md:px-10 md:w-10/12 md:mx-auto relative">
           <div>
-            <h3 className="text-2xl font-semibold">Newicon, Senior Developer</h3>
-            <small>November 2021 - Present</small>
-            <div className="mt-4">
+            <img src="../../images/logos/newicon.svg" width="150" className="max-w-full h-auto w-24 block mb-4" />
+            <h3 className="text-2xl font-semibold">
+              <a className="text-blue-600" href="https://newicon.net" rel="nofollow">Newicon</a>, Senior Developer
+            </h3>
+            <small className="text-sm">November 2021 - Present</small>
+            <div className="mt-6">
               <p className="text-lg">
-                Newicon was a big step up. I'd gotten very comfortable working with the same stack day in, day out.
-                This allowed me to become proficient with Laravel and React but also meant that I hadn't expanded my skillset as much as I'd hoped.
-                On my second day this problem was solved when I was asked to learn the basics of Magento. Magento is quite unlike any other PHP framework.
-                It's built to accomodate pretty much any business needs that you can imagine and as a result, it's a very complex framework to learn.
+                At Newicon, I have encountered a significant shift in my development work, moving beyond my comfort zone with Laravel and React.
+                On my second day, I was tasked with learning the basics of Magento, a complex PHP framework designed to accommodate diverse business needs.
+                This experience has been a stark contrast to my previous work, forcing me to expand my skillset rapidly.
+                Additionally, I have been introduced to various other technologies such as WordPress, Neon, and Drupal, and I work on bespoke projects that vary in technology.
+                This broad exposure includes front-end development with Vue.js, a brief foray into Elixir/Erlang, and substantial DevOps experience with AWS and Azure, significantly enhancing my proficiency in these areas.
               </p>
               <p className="mt-4 text-lg">
-                During my time at Newicon I've also been introduced to Wordpress, Neon and Drupal. Projects are always bespoke so the technology varies.
-                It's not just PHP frameworks that I've explored.
-                I've built frontends in Vue JS and even had a brief encounter with Elixir/Erlang.
-                I've worked with AWS and Azure which has taken my DevOps skills to a whole new level.
-                I've also worked with many APIs, often integrating multiple for a single project.
+                During my tenure at Newicon, I am not only exploring new development methods but also improving my problem-solving skills.
+                This journey involves tackling diverse and challenging issues, which at times take me through the "five stages of grief."
+                This experience has boosted my confidence and my enjoyment of new challenges.
+                Frequent direct interactions with clients have honed my soft skills.
+                As a Senior Developer, I work with considerable autonomy, often handling development, DevOps, and quality assurance.
+                I have integrated unit testing into my PHP code, embraced TypeScript for better front-end development, and continuously strive to write superior code, benefiting from the opportunities provided by Newicon.
               </p>
-              <p className="mt-4 text-lg">
-                I've not just learned about new ways to develop but how to develop better.
-                Problem solving is a large part of being a developer and it's a skill that you're always looking to improve.
-                At Newicon I've had to solve all sorts of problems and quite a few have taken me through the 5 stages of grief... and back again.
-                My confidence has grown and I've learned to enjoy taking on new challenges.
-                I've also improved my soft skills mostly due to frequent direct contact with Clients.
-              </p>
-              <p className="mt-4 text-lg">
-                As a Senior developer I've learned to work with a lot of autonomy. I am often the developer, the DevOps and the Quality Assurance.
-                I've learned how to integrate unit testing into my PHP which allows me to write better code first time.
-                I've recently embraced Typescript which has been a learning curve but has resulted in me writing better frontend code.
-                I am always striving to write better code and Newicon provides me with the opportunities to do that.
-              </p>
-              <p className="mt-4 font-semibold text-lg">
-                Progression: Middleweight Developer &#8594; Senior Developer.
+              <p className="mt-6 text-sm">
+                Progression: <span className="font-semibold">Middleweight &#8594; Senior</span>.
               </p>
             </div>
           </div>
           <div className="mt-12">
-            <h3 className="text-2xl font-semibold">PDW Group, Junior Software Engineer</h3>
-            <small>October 2018 - November 2021</small>
-            <div className="mt-4 text-lg">
+            <img src="../../images/logos/pdw-logo.webp" width="150" className="max-w-full h-auto w-30 block mb-4" />
+            <h3 className="text-2xl font-semibold">
+              <a className="text-blue-600" href="https://www.pdwgroup.co.uk/" rel="nofollow">PDW Group</a>, Junior Software Engineer
+            </h3>
+            <small className="text-sm">October 2018 - November 2021</small>
+            <div className="mt-6 text-lg">
               <p>
-                PDW Group was the start of my professional career and my introduction to Laravel.
-                It was a crash course into all things development.
-                I'd built a few basic applications and played around with various techologies but I'd never built anything that was going to be <em>used</em> before.
-                Within a few days I'd already been tasked with rebuilding one of their internal systems.
-                This coincidentally was my first experience working with a PHP framework (Laravel).
+                PDW Group marked the beginning of my professional career and my introduction to Laravel.
+                It was an intense crash course in development, transitioning from building basic applications to creating systems intended for actual use.
+                Within a few days, I was tasked with rebuilding one of their internal systems, marking my first experience with a PHP framework (Laravel).
+                Initially, working with a framework felt like cheating after writing vanilla PHP for so long, but within a few weeks, I couldn't imagine not using one.
+                Laravel remains my preferred PHP framework to this day, and this experience provided valuable insights into how applications are used in the real world.
+                Additionally, it was at PDW Group where I first encountered React, which has since become my favorite JavaScript framework.
               </p>
               <p className="mt-4 text-lg">
-                After writing vanilla PHP for so long a framework felt like cheating, very plug and play.
-                After a few weeks I couldn't believe that I'd ever not used a framework.
-                Laravel remains my preferred PHP framework to this day.
-                I gained a good perspective on how applications are used in the real world.
-                I learned a lot of technologies while working at PDW Group and improved my problem solving abilities.
-                This was also where I was introduced to React, which happens to be my favourite JS framework.
+                At PDW Group, I developed numerous applications to support daily company operations and aid in management tasks.
+                I learned DevOps early on, starting with basic Linux deployment and eventually advancing to AWS.
+                My role encompassed all aspects of being a developer, from converting specifications into actionable tasks to building user interfaces, backend logic, and databases.
+                This comprehensive exposure improved my problem-solving abilities and expanded my technical skillset across various technologies.
+                My time at PDW Group was instrumental in shaping my development expertise and laying a strong foundation for my career.
               </p>
-              <p className="mt-4 text-lg">
-                I worked on quite a few applications to support the day to day operations of the company and help people manage everything.
-                I learned dev ops quite early on: starting with basic Linux deployment and progressing to AWS.
-                During my time there I experienced all aspects of being a developer and I was responsible for the whole application.
-                I converted the specification into a workable set of tasks. I built User Interfaces, backend logic and built the databases.
-              </p>
-              <p className="mt-4 font-semibold text-lg">
-                Progression: Graduate Developer &#8594; Junior Developer.
+              <p className="mt-6 text-sm">
+                Progression: <span className="font-semibold">Graduate &#8594; Junior</span>.
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="py-10 md:py-20">
+      <div className="py-10">
         <div className="px-6">
           <h2 className="text-3xl md:text-5xl md:text-center font-semibold text-gray-800">Get in touch</h2>
           <p className="md:text-center md:w-8/12 mx-auto mt-4 text-lg">If you would like to contact me you can use one of the methods below:</p>

@@ -8,22 +8,16 @@ const Portfolio: React.FC = () => {
         <p className="md:text-center md:w-8/12 mx-auto mt-4 text-lg">Like all industry employed developers, the majority of my work was completed for clients and is therefore Intellectual Property. But here are a few of my personal projects.</p>
       </div>
       <div className="pb-10">
-        <div className="p-8 bg-gray-100">
+        <div className="p-8 md:p-16 bg-gray-100">
           <h2 className="text-xl md:text-3xl font-semibold">
             <a href="https://domhart.co.uk" target="_blank" className="text-blue-600">domhart.co.uk</a>
           </h2>
-          <p className="mt-3 text-lg">
-            domhart.co.uk is my personal portfolio.
-            This website introduces me, showcases who I am and what I do.
-            It includes examples of what I have achieved, a sample of the photos I take in my free time and a basic about page.
-            This app is built using&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://laravel.com/docs/11.x/releases">Laravel 11</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://www.w3schools.com/css/css_intro.asp">CSS</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://react.dev/">React</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://www.typescriptlang.org/">TypeScript</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://tailwindcss.com/">Tailwind</a>.
+          <p className="mt-4 text-lg">
+            domhart.co.uk is my personal portfolio website.
+            This website lists my professional experience, showcases some of my personal projects and allows you to view a selection of the photos that I have taken in my free time.
+            This website is still a work in progress and more content may be added to it in the future.
           </p>
-          <div className="block grid md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 mt-6">
+          <div className="block grid md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 mt-8">
             <div className="relative portfolio__item">
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-black py-2 px-4 font-semibold rounded bg-[rgba(255,255,255,0.65)]">
                 Homepage
@@ -43,23 +37,36 @@ const Portfolio: React.FC = () => {
               <img src="../../images/portfolio/domhart/about.jpg" alt="contact" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
           </div>
+          <div className="mt-8">
+            <p className="text-lg font-semibold">Built using:</p>
+            <div className="mt-8">
+              <a className="text-blue-600 font-semibold inline-block align-middle" href="https://laravel.com/docs/11.x/releases">
+                <img src="../../images/logos/laravel.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://react.dev/">
+                <img src="../../images/logos/react.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://www.typescriptlang.org/">
+                <img src="../../images/logos/typescript.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://tailwindcss.com/">
+                <img src="../../images/logos/tailwind.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <p className="mt-8 text-sm">Laravel, React JS, TypeScript and TailwindCSS.</p>
+            </div>
+          </div>
         </div>
-        <div className="p-8">
+        <div className="p-8 md:p-16">
           <h2 className="text-xl md:text-3xl font-semibold">
             <a href="https://ceireburbidge.co.uk" target="_blank" className="text-blue-600">ceireburbidge.co.uk</a>
           </h2>
-          <p className="mt-3 text-lg">
+          <p className="mt-4 text-lg">
             ceireburbidge.co.uk is a photography portfolio for Ceire Burbidge.
-            This portfolio organises Ceire's favourite photos into custom albums and utilises the react-editable-photo-grid allowing her to position her photos as she likes.
-            There is a bespoke admin stats dashboard where Ceire can view how many times someone has viewed an album and the images within it. It also includes a basic about page and contact form.
-            This app is built using&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://laravel.com/docs/11.x/releases">Laravel 11</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://www.w3schools.com/css/css_intro.asp">CSS</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://react.dev/">React</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://www.typescriptlang.org/">TypeScript</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://tailwindcss.com/">Tailwind</a>.
+            This portfolio allows Ceire to organise her photos into albums and utilises the react-editable-photo-grid allowing her to position her photos as she likes.
+            The website features a bespoke stats dashboard where Ceire can see how many times people have viewed her albums and photos.
+            There is a basic about page and a contact form which allows people to contact Ceire through the website.
           </p>
-          <div className="block grid md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 mt-6">
+          <div className="block grid md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 mt-8">
             <div className="relative portfolio__item">
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-white py-2 px-4 font-semibold rounded bg-[rgba(0,0,0,0.65)]">
                 Albums
@@ -79,8 +86,26 @@ const Portfolio: React.FC = () => {
               <img src="../../images/portfolio/ceireburbidge/statistics.jpg" alt="homepage" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
           </div>
+          <div className="mt-8">
+            <p className="text-lg font-semibold">Built using:</p>
+            <div className="mt-8">
+              <a className="text-blue-600 font-semibold inline-block align-middle" href="https://laravel.com/docs/11.x/releases">
+                <img src="../../images/logos/laravel.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://react.dev/">
+                <img src="../../images/logos/react.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://www.typescriptlang.org/">
+                <img src="../../images/logos/typescript.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://tailwindcss.com/">
+                <img src="../../images/logos/tailwind.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <p className="mt-8 text-sm">Laravel, React JS, TypeScript and TailwindCSS.</p>
+            </div>
+          </div>
         </div>
-        <div className="p-8 bg-gray-100">
+        <div className="p-8 md:p-16 bg-gray-100">
           <h2 className="text-xl md:text-3xl font-semibold">
             <a href="https://www.npmjs.com/package/react-editable-photo-grid" target="_blank" className="text-blue-600">react-editable-photo-grid</a>
           </h2>
@@ -89,11 +114,8 @@ const Portfolio: React.FC = () => {
             Photos are organised into rows and columns. Controls are provided to move rows and photos around the grid.
             It also includes a basic gallery component that can be launched when a photo is clicked.
             This package does not include data management.
-            This package is built using&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://www.w3schools.com/css/css_intro.asp">CSS</a> |&nbsp;
-            <a className="text-blue-600 font-semibold" href="https://www.typescriptlang.org/">TypeScript</a>.
           </p>
-          <div className="block grid md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 mt-6">
+          <div className="block grid md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-4 mt-8">
             <div className="relative portfolio__item">
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-white py-2 px-4 font-semibold rounded bg-[rgba(0,0,0,0.65)]">
                 NPM
@@ -111,6 +133,21 @@ const Portfolio: React.FC = () => {
                 Gallery
               </div>
               <img src="../../images/portfolio/photogrid/gallery.jpg" alt="edit grid" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
+            </div>
+          </div>
+          <div className="mt-8">
+            <p className="text-lg font-semibold">Built using:</p>
+            <div className="mt-8">
+              <span className="text-blue-600 font-semibold inline-block align-middle">
+                <img src="../../images/logos/css.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </span>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://www.javascript.com/">
+                <img src="../../images/logos/javascript.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <a className="text-blue-600 font-semibold inline-block align-middle ml-6" href="https://www.typescriptlang.org/">
+                <img src="../../images/logos/typescript.png" className="h-8 md:h-16 w-auto max-w-full" />
+              </a>
+              <p className="mt-8 text-sm">CSS, JavaScript and TypeScript.</p>
             </div>
           </div>
         </div>

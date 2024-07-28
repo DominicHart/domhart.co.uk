@@ -44,13 +44,13 @@ const Nav: React.FC = () => {
             <Link className="block py-4 hover:text-white" to="/">Home.tsx</Link>
           </li>
           <li className="inline-block ml-4 lg:ml-8">
+            <Link className="block py-4 hover:text-white" to="/about">About.tsx</Link>
+          </li>
+          <li className="inline-block ml-4 lg:ml-8">
             <Link className="block py-4 hover:text-white" to="/portfolio">Portfolio.tsx</Link>
           </li>
           <li className="inline-block ml-4 lg:ml-8">
             <Link className="block py-4 hover:text-white" to="/photos">Photos.tsx</Link>
-          </li>
-          <li className="inline-block ml-4 lg:ml-8">
-            <Link className="block py-4 hover:text-white" to="/about">About.tsx</Link>
           </li>
         </ul>
         {user.user &&
@@ -67,13 +67,13 @@ const Nav: React.FC = () => {
               <Link className="block py-4 hover:text-white" onClick={goToLink} to="/">Home.tsx</Link>
             </li>
             <li className="block mt-4">
+              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/about">About.tsx</Link>
+            </li>
+            <li className="block mt-4">
               <Link className="block py-2 hover:text-white" onClick={goToLink} to="/portfolio">Portfolio.tsx</Link>
             </li>
             <li className="block mt-4">
               <Link className="block py-2 hover:text-white" onClick={goToLink} to="/photos">Photos.tsx</Link>
-            </li>
-            <li className="block mt-4">
-              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/contact">Contact.tsx</Link>
             </li>
             {user.user &&
               <li className="block mt-6">
