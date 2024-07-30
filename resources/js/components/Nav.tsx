@@ -36,7 +36,7 @@ const Nav: React.FC = () => {
         {!navOpen &&
           <button type="button" onClick={toggleMobileNav} className="block md:hidden absolute right-8 top-11 text-code-yellow">OpenNav();</button>
         }
-        <h1 className="block font-semibold text-2xl w-18 absolute z-5 left-8 top-1/2 -translate-y-1/2 text-code-blue">
+        <h1 className="block font-semibold text-2xl w-18 absolute z-5 m-0 left-8 top-1/2 -translate-y-1/2 text-code-blue">
           <Link to="/">Dom Hart</Link>
         </h1>
         <ul className="hidden md:inline-block relative top-1/2 -translate-y-1/2 text-center p-0 text-md font-medium text-code-green">

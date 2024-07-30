@@ -41,3 +41,17 @@ h1, h2, h3, h4, h5, h6, p, a, button, span, small {
  .portfolio__item div {
     display: none;
  }
+
+ .job__title {
+    white-space: nowrap;
+    width: 0;
+    animation: typing 1.5s forwards;
+ }
+
+@keyframes typing {
+    from { width: 0 }
+    to { 
+        width: 100%;
+        border-right-width: 0;
+    }
+}

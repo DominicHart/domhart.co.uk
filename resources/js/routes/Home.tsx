@@ -17,7 +17,9 @@ const Home: React.FC = () => {
           <h1 className="block text-5xl md:text-7xl font-semibold m-0 text-code-blue">
             <a href="#aboutMe" role="button" className="cursor-pointer" onClick={scrollToNext}>Dom Hart</a>
           </h1>
-          <p className="block text-2xl md:text-3xl m-0 mt-2 text-code-gray">Senior Developer</p>
+          <div className="inline-block">
+            <p className="block text-2xl md:text-3xl m-0 mt-2 text-code-gray border-r-8 overflow-hidden border-white job__title">Senior Developer</p>
+          </div>
         </div>
       </div>
       <div className="bg-white px-6 py-6 md:py-24 text-gray-900" id="aboutMe">
