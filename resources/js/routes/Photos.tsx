@@ -68,7 +68,7 @@ const Photos: React.FC = () => {
     e.preventDefault();
 
     let formData = new FormData();
-    formData.append('photos', JSON.stringify(photos));
+    formData.append('photos', JSON.stringify(rows));
     formData.append('changes', changes.toString());
 
     savePhotoPositions(formData).then((response) => {
