@@ -12,8 +12,8 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <div className="p-4 h-[calc(100vh-112px)] bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: "url('../../images/code.jpg')" }}>
-        <div className="text-center relative top-1/2 -translate-y-1/2">
+      <div className="p-4 h-[calc(100vh-112px)] bg-cover bg-center bg-no-repeat relative intro">
+        <div className="text-center relative top-1/2 -translate-y-1/2 max-w-6/12">
           <h1 className="block text-5xl md:text-7xl font-semibold m-0 text-code-blue">
             <a href="#aboutMe" role="button" className="cursor-pointer" onClick={scrollToNext}>Dom Hart</a>
           </h1>

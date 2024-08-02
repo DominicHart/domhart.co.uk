@@ -55,3 +55,13 @@ h1, h2, h3, h4, h5, h6, p, a, button, span, small {
         border-right-width: 0;
     }
 }
+
+.intro {
+    background-image: url('../../images/code-mobile.jpg');
+}
+
+@media only screen and (min-width: 1024px) {
+    .intro {
+        background-image: url('../../images/code.jpg');
+    }
+}
