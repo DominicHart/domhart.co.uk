@@ -203,7 +203,7 @@ const Photos: React.FC = () => {
       Swal.fire('Save Changes', 'You have unsaved changes that will be lost, please save them before you continue', 'warning');
       return;
     }
-    
+
     if (!selectedPhotos.length) {
       Swal.fire('Select Photos', 'No photos selected!', 'warning');
       return;
@@ -316,6 +316,7 @@ const Photos: React.FC = () => {
         imageSrcProperty="thumbnail_path"
         useGallery={true}
         gallerySrcProperty="image_path"
+        galleryType="scroll"
       />
       <input type="file" className="hidden" id="imageSelection" onChange={updatePhoto} />
     </div>
