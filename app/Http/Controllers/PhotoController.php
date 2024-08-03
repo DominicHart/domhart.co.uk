@@ -11,11 +11,11 @@ class PhotoController extends Controller
     /**
      * @var Photo
      */
-    protected $_photoService;
+    protected $photoService;
 
     public function __construct(Photo $photoService)
     {
-        $this->_photoService = $photoService;
+        $this->photoService = $photoService;
     }
 
     /**
@@ -26,7 +26,7 @@ class PhotoController extends Controller
      */
     public function index(Request $request) : JsonResponse
     {
-        $photos = $this->_photoService->getPhotosForGrid();
+        $photos = $this->photoService->getPhotosForGrid();
         return response()->json($photos, 200);
     }
 
@@ -34,7 +34,7 @@ class PhotoController extends Controller
     {
         $error = '';
 
-        $created = $this->_photoService->uploadPhotos(
+        $created = $this->photoService->uploadPhotos(
             [
                 'photos' => $request->file('photos'),
                 'row' => $request->input('row'),
@@ -56,9 +56,27 @@ class PhotoController extends Controller
      * @param $image
      * @return mixed
      */
-    public function show($path)
+    public function show(string $path)
     {
-        return $this->_photoService->streamPhoto($path);
+        return $this->photoService->streamPhoto($path);
+    }
+
+    /**
+     * Returns a photo for editing
+     *
+     * @param string $ulid
+     * @return JsonResponse
+     */
+    public function edit(string $ulid): JsonResponse
+    {
+        $photo = $this->photoService->getPhoto($ulid);
+
+        if (!$photo) {
+            return response()->json('No photo found', 404);
+        }
+
+        return response()->json($photo, 200);
+
     }
 
     /**
@@ -69,7 +87,7 @@ class PhotoController extends Controller
      */
     public function savePhotoPositions(Request $request) : JsonResponse
     {
-        $updated = $this->_photoService->savePositions(
+        $updated = $this->photoService->savePositions(
             [
                 'photos' => json_decode($request->input('photos')),
                 'changes' => $request->input('changes')
@@ -84,7 +102,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * Replaced a photo
+     * Update photo details
      *
      * @param Request $request
      * @param string $ulid
@@ -92,8 +110,26 @@ class PhotoController extends Controller
      */
     public function update(Request $request, string $ulid) : JsonResponse
     {
+        $updated = $this->photoService->updatePhotoDetails($ulid, (array) json_decode($request->input('photo')));
+
+        if (!$updated) {
+            return response()->json('Photo details were not updated', 400);
+        }
+
+        return response()->json('Your changes have been saved!', 200);
+    }
+
+    /**
+     * Replace a photo
+     *
+     * @param Request $request
+     * @param string $ulid
+     * @return JsonResponse
+     */
+    public function replacePhoto(Request $request, string $ulid) : JsonResponse
+    {
         $error = '';
-        $replaced = $this->_photoService->replacePhotoImage(
+        $replaced = $this->photoService->replacePhotoImage(
             [
                 'photo' => $request->file('photo')
             ],
@@ -120,7 +156,7 @@ class PhotoController extends Controller
         $photoUlids = json_decode($request->input('ids'));
 
         foreach ($photoUlids as $photoUlid) {
-            $deleted = $this->_photoService->destroyPhoto($photoUlid, $error);
+            $deleted = $this->photoService->destroyPhoto($photoUlid, $error);
 
             if (!$deleted) {
                 return response()->json($error, 400);

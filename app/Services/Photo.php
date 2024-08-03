@@ -35,7 +35,7 @@ class Photo implements IPhoto
         $photos = PhotoModel::orderBy('row')
             ->orderBy('column')
             ->get();
-            
+
         $photosArray = [];
 
         foreach ($photos as $photo) {
@@ -58,7 +58,9 @@ class Photo implements IPhoto
                 'image_path' => $photo->image_path,
                 'thumbnail_path' => $photo->thumbnail_path,
                 'width' => $sizeMeta[0] ?? 0,
-                'height' => $sizeMeta[1] ?? 0
+                'height' => $sizeMeta[1] ?? 0,
+                'name' => $photo->title ?? '',
+                'description' => $photo->description ?? ''
             ];
         }
 
@@ -164,6 +166,9 @@ class Photo implements IPhoto
             $error = 'Photo not found';
             return null;
         }
+
+        $photo->title = $photo->title ?? '';
+        $photo->description = $photo->description ?? '';
 
         return $photo;
     }
@@ -290,6 +295,24 @@ class Photo implements IPhoto
 
             }
         }
+
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updatePhotoDetails(string $uuid, array $data) : bool
+    {
+        $title = $data['title'] ?? null;
+        $description = $data['description'] ?? null;
+
+        $photo = PhotoModel::where('ulid', $uuid)
+            ->first();
+
+        $photo->title = $title;
+        $photo->description = $description;
+        $photo->save();
 
         return true;
     }

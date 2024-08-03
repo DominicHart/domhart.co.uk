@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto, deletePhotos } from '../api/Photo';
+import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto, deletePhotos, editPhoto, updatePhotoDetails } from '../api/Photo';
 import { PhotoGrid, PhotoItem, PhotoRows, sortPhotosIntoRows } from 'react-editable-photo-grid';
 import { File } from '../types/photo';
 import { useUser } from '../UserContext';
-import { savingData } from "../utils";
+import { savingData, apiUrl } from "../utils";
 import Swal from "sweetalert2";
 import Modal from 'react-modal';
 import ModalHeader from '../components/modal/ModalHeader';
@@ -32,10 +32,12 @@ const Photos: React.FC = () => {
     [rows, setRows] = useState<PhotoRows>([]),
     [loading, setLoading] = useState<boolean>(true),
     [files, setFiles] = useState<File[]>([]),
-    [modalIsOpen, setIsOpen] = useState<boolean>(false),
+    [activeModal, setActiveModal] = useState<number>(0),
     [selectedPhotos, setSelectedPhotos] = useState<Array<string>>([]),
     [changes, setChanges] = useState<number>(0),
     [isEditing, setIsEditing] = useState<boolean>(false),
+    [editingId, setEditingId] = useState<string | null>(null),
+    [photo, setPhoto] = useState<PhotoItem | null>(null),
     [activeDropdown, setActiveDropdown] = useState(null);
 
   const user = useUser();
@@ -46,7 +48,7 @@ const Photos: React.FC = () => {
       return;
     }
 
-    setIsOpen(true);
+    setActiveModal(1);
   }
 
   const closeModal = () => {
@@ -54,7 +56,7 @@ const Photos: React.FC = () => {
       setFiles([]);
     }
 
-    setIsOpen(false);
+    setActiveModal(0);
   }
 
   const getData = async () => {
@@ -174,7 +176,7 @@ const Photos: React.FC = () => {
     }
   }
 
-  const updatePhoto = (e: any) => {
+  const uploadPhoto = (e: any) => {
     const file = e.target.files[0];
 
     if (!file) {
@@ -240,6 +242,45 @@ const Photos: React.FC = () => {
     setSelectedPhotos(newSelectedPhotos);
   }
 
+  const edit = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const id = e.currentTarget.getAttribute('href');
+
+    if (!id) {
+      return;
+    }
+
+    setEditingId(id);
+
+    const photoData = await editPhoto(id);
+
+    if (!photoData) {
+      return;
+    }
+
+    setPhoto(photoData);
+    setActiveModal(2);
+  }
+
+  const updatePhoto = async (e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingId) {
+      return;
+    }
+
+    let formData = new FormData();
+    formData.append('photo', JSON.stringify(photo));
+    formData.append('_method', 'PATCH');
+    const updated = await updatePhotoDetails(editingId, formData);
+
+    if (!updated) {
+      return;
+    }
+
+    setActiveModal(0);
+    getData();
+  }
+
   useEffect(() => {
     getData();
   }, []);
@@ -250,6 +291,7 @@ const Photos: React.FC = () => {
     activeDropdown={activeDropdown}
     openDropdown={openDropdown}
     openFileBrowser={openFileBrowser}
+    edit={edit}
   />
 
   if (loading) {
@@ -284,9 +326,8 @@ const Photos: React.FC = () => {
           </div> : <div className="h-0.5" />
       }
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={activeModal === 1}
         onRequestClose={closeModal}
-        contentLabel="Example Modal"
         style={customStyles}
       >
         <ModalHeader
@@ -300,6 +341,43 @@ const Photos: React.FC = () => {
         <div className="text-right border-t border-gray-300 mt-6 py-6 px-3">
           <button type="button" className="border border-gray-300 py-3 px-6 font-semibold bg-gray-300 rounded" onClick={closeModal}>Dismiss</button>
           <button type="button" className="border border-code-dark-gray font-semibold py-3 px-6 ml-2 bg-code-dark-gray text-code-green rounded" onClick={uploadPhotos}>Upload Photos</button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={activeModal === 2}
+        onRequestClose={closeModal}
+        style={customStyles}
+      >
+        <ModalHeader
+          title="Edit Image"
+          closeModal={closeModal}
+        />
+        <form onSubmit={updatePhoto} method="post" action={`${apiUrl}/photos/${editingId}`}>
+          <div>
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              className="border border-gray-300 rounded block w-full p-2 mt-2 outline-none"
+              value={photo ? photo.title : ''}
+              onChange={(e: React.KeyboardEvent<HTMLInputElement>) => setPhoto({ ...photo, title: e.currentTarget.value })}
+            />
+          </div>
+          <div className="mt-4">
+            <label htmlFor="description">Description</label>
+            <textarea
+              name="description"
+              id="description"
+              className="border border-gray-300 rounded block w-full p-2 mt-2 outline-none"
+              value={photo ? photo.description : ''}
+              onChange={(e: React.KeyboardEvent<HTMLInputElement>) => setPhoto({ ...photo, description: e.currentTarget.value })}
+            />
+          </div>
+        </form>
+        <div className="text-right border-t border-gray-300 mt-6 py-6 px-3">
+          <button type="button" className="border border-gray-300 py-3 px-6 font-semibold bg-gray-300 rounded" onClick={closeModal}>Dismiss</button>
+          <button type="button" className="border border-code-dark-gray font-semibold py-3 px-6 ml-2 bg-code-dark-gray text-code-green rounded" onClick={updatePhoto}>Update Photo</button>
         </div>
       </Modal>
       <PhotoGrid
@@ -318,7 +396,7 @@ const Photos: React.FC = () => {
         gallerySrcProperty="image_path"
         galleryType="scroll"
       />
-      <input type="file" className="hidden" id="imageSelection" onChange={updatePhoto} />
+      <input type="file" className="hidden" id="imageSelection" onChange={uploadPhoto} />
     </div>
   );
 };
