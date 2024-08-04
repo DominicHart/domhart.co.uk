@@ -176,7 +176,7 @@ const Photos: React.FC = () => {
     }
   }
 
-  const uploadPhoto = (e: any) => {
+  const uploadReplacementPhoto = (e: any) => {
     const file = e.target.files[0];
 
     if (!file) {
@@ -396,7 +396,7 @@ const Photos: React.FC = () => {
         gallerySrcProperty="image_path"
         galleryType="scroll"
       />
-      <input type="file" className="hidden" id="imageSelection" onChange={uploadPhoto} />
+      <input type="file" className="hidden" id="imageSelection" onChange={uploadReplacementPhoto} />
     </div>
   );
 };
