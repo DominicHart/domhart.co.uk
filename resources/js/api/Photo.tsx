@@ -11,7 +11,6 @@ export const getPhotos = async (): Promise<PhotoRows> => {
 const buildHeaders = () => {
   let headers = getHeaders();
   headers.headers['content-type'] = 'multipart/form-data';
-  console.log(headers);
   return headers;
 }
 

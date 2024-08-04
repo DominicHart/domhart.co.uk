@@ -62,18 +62,30 @@ const Nav: React.FC = () => {
       {navOpen &&
         <nav className="block md:hidden bg-code-dark-gray w-full fixed z-50 left-0 top-[112px] px-8 h-full">
           <button type="button" onClick={toggleMobileNav} className="block md:hidden absolute right-8 top-[-70px] text-code-yellow">CloseNav();</button>
-          <ul className="text-left text-md font-medium text-code-green">
+          <ul className="text-left text-md font-medium text-white">
             <li className="inline-block">
-              <Link className="block py-4 hover:text-white" onClick={goToLink} to="/">Home.tsx</Link>
+              <Link className="block py-2" onClick={goToLink} to="/">
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
+                <span className="inline-block align-middle">Home.tsx</span>
+              </Link>
             </li>
             <li className="block mt-4">
-              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/about">About.tsx</Link>
+              <Link className="block py-2" onClick={goToLink} to="/about">
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
+                <span className="inline-block align-middle">About.tsx</span>
+              </Link>
             </li>
             <li className="block mt-4">
-              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/portfolio">Portfolio.tsx</Link>
+              <Link className="block py-2" onClick={goToLink} to="/portfolio">
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
+                <span className="inline-block align-middle">Portfolio.tsx</span>
+              </Link>
             </li>
             <li className="block mt-4">
-              <Link className="block py-2 hover:text-white" onClick={goToLink} to="/photos">Photos.tsx</Link>
+              <Link className="block py-2" onClick={goToLink} to="/photos">
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
+                <span className="inline-block align-middle">Photos.tsx</span>
+              </Link>
             </li>
             {user.user &&
               <li className="block mt-6">

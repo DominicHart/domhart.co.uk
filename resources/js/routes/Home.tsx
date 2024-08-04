@@ -9,16 +9,20 @@ const Home: React.FC = () => {
       section.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
   }
+  
 
   return (
     <>
-      <div className="p-4 h-[calc(100vh-112px)] bg-cover bg-center bg-no-repeat relative intro">
+      <div className="p-4 h-[calc(100dvh-112px)] bg-cover bg-center bg-no-repeat relative intro">
         <div className="text-center relative top-1/2 -translate-y-1/2 max-w-6/12">
-          <h1 className="block text-5xl md:text-7xl font-semibold m-0 text-code-blue">
-            <a href="#aboutMe" role="button" className="cursor-pointer" onClick={scrollToNext}>Dom Hart</a>
+          <h1 className="block text-5xl md:text-7xl font-semibold m-0 text-gray-200">
+            <p>Dom Hart</p>
           </h1>
           <div className="inline-block">
             <p className="block text-2xl md:text-3xl m-0 mt-2 text-code-gray border-r-8 overflow-hidden border-white job__title">Senior Developer</p>
+          </div>
+          <div className="w-full text-center mt-8 md:mt-12">
+            <button type="button" onClick={scrollToNext} className="inline-block text-white text-4xl">&#8595;</button>
           </div>
         </div>
       </div>
