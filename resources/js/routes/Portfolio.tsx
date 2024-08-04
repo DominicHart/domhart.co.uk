@@ -22,7 +22,7 @@ const Portfolio: React.FC = () => {
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-black py-2 px-4 font-semibold rounded bg-[rgba(255,255,255,0.65)]">
                 Homepage
               </div>
-              <img src="../../images/portfolio/domhart/domhart.jpg" alt="homepage" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
+              <img src="../../images/portfolio/domhart/homepage.jpg" alt="homepage" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
             <div className="relative portfolio__item">
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-white py-2 px-4 font-semibold rounded bg-[rgba(0,0,0,0.65)]">
@@ -34,7 +34,7 @@ const Portfolio: React.FC = () => {
               <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-12 text-white py-2 px-4 font-semibold rounded bg-[rgba(0,0,0,0.65)]">
                 About Page
               </div>
-              <img src="../../images/portfolio/domhart/about.jpg" alt="contact" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
+              <img src="../../images/portfolio/domhart/career.jpg" alt="career" className="block max-w-full h-full object-cover w-full shadow-md" width="300" />
             </div>
           </div>
           <div className="mt-8">

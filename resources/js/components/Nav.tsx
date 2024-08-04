@@ -18,7 +18,7 @@ const Nav: React.FC = () => {
     })
   }
 
-  const toggleMobileNav = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleNav = (e: React.MouseEvent<HTMLButtonElement>) => {
     setNavOpen(prevNavOpen => !prevNavOpen);
   }
 
@@ -32,58 +32,42 @@ const Nav: React.FC = () => {
 
   return (
     <div>
-      <nav className="fixed top-0 left-0 md:relative bg-code-dark-gray w-full p-4 h-28 z-20 text-center h-[112px]">
-        {!navOpen &&
-          <button type="button" onClick={toggleMobileNav} className="block md:hidden absolute right-8 top-11 text-code-yellow">OpenNav();</button>
-        }
+      <nav className={"fixed top-0 left-0 bg-code-dark-gray w-full p-4 h-20 z-20 text-center"}>
+        <button type="button" onClick={toggleNav} className="block absolute right-8 top-7 text-code-yellow">
+          <span className={`block bg-white h-0.5 ${navOpen ? "relative rotate-45 top-[10px] w-8" : "w-6"}`} />
+          {!navOpen && (
+            <span className="block bg-white w-6 h-0.5 mt-2" />
+          )}
+          <span className={`block bg-white h-0.5 ${navOpen ? "relative -rotate-45 top-[6px] w-8" : "w-6 mt-2"}`} />
+        </button>
         <h1 className="block font-semibold text-2xl w-18 absolute z-5 m-0 left-8 top-1/2 -translate-y-1/2 text-code-blue">
           <Link to="/">Dom Hart</Link>
         </h1>
-        <ul className="hidden md:inline-block relative top-1/2 -translate-y-1/2 text-center p-0 text-md font-medium text-code-green">
-          <li className="inline-block">
-            <Link className="block py-4 hover:text-white" to="/">Home.tsx</Link>
-          </li>
-          <li className="inline-block ml-4 lg:ml-8">
-            <Link className="block py-4 hover:text-white" to="/about">About.tsx</Link>
-          </li>
-          <li className="inline-block ml-4 lg:ml-8">
-            <Link className="block py-4 hover:text-white" to="/portfolio">Portfolio.tsx</Link>
-          </li>
-          <li className="inline-block ml-4 lg:ml-8">
-            <Link className="block py-4 hover:text-white" to="/photos">Photos.tsx</Link>
-          </li>
-        </ul>
-        {user.user &&
-          <div className="hidden md:block absolute right-8 top-1/2 -translate-y-1/2">
-            {logoutLink}
-          </div>
-        }
       </nav>
       {navOpen &&
-        <nav className="block md:hidden bg-code-dark-gray w-full fixed z-50 left-0 top-[112px] px-8 h-full">
-          <button type="button" onClick={toggleMobileNav} className="block md:hidden absolute right-8 top-[-70px] text-code-yellow">CloseNav();</button>
-          <ul className="text-left text-md font-medium text-white">
-            <li className="inline-block">
+        <nav className="block bg-code-dark-gray w-full fixed z-50 left-0 top-[80px] px-8 h-full">
+          <ul className="md:text-center text-lg md:text-2xl font-medium text-white md:relative md:top-52">
+            <li className="block">
               <Link className="block py-2" onClick={goToLink} to="/">
-                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-4 w-auto mr-3" />
                 <span className="inline-block align-middle">Home.tsx</span>
               </Link>
             </li>
             <li className="block mt-4">
               <Link className="block py-2" onClick={goToLink} to="/about">
-                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
-                <span className="inline-block align-middle">About.tsx</span>
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-4 w-auto mr-3" />
+                <span className="inline-block align-middle">Career.tsx</span>
               </Link>
             </li>
             <li className="block mt-4">
               <Link className="block py-2" onClick={goToLink} to="/portfolio">
-                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-4 w-auto mr-3" />
                 <span className="inline-block align-middle">Portfolio.tsx</span>
               </Link>
             </li>
             <li className="block mt-4">
               <Link className="block py-2" onClick={goToLink} to="/photos">
-                <img src="../../images/logos/react.png" className="inline-block align-middle h-3 w-auto mr-3" />
+                <img src="../../images/logos/react.png" className="inline-block align-middle h-4 w-auto mr-3" />
                 <span className="inline-block align-middle">Photos.tsx</span>
               </Link>
             </li>

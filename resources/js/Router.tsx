@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Home from "./routes/Home";
 import About from "./routes/About";
@@ -12,7 +12,7 @@ import ScrollToTop from './components/ScrollToTop';
 const AppLayout = ({ children }: { children: React.ReactNode }) => (
   <>
     <Nav />
-    <div className="pt-[112px] md:pt-0">
+    <div className={window.location.pathname !== '/' ? "pt-[80px]" : null}>
       {children}
     </div>
     <Footer />
