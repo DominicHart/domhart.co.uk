@@ -33,12 +33,12 @@ const Nav: React.FC = () => {
   return (
     <div>
       <nav className={"fixed top-0 left-0 bg-code-dark-gray w-full p-4 h-20 z-20 text-center"}>
-        <button type="button" onClick={toggleNav} className="block absolute right-8 top-7 text-code-yellow">
-          <span className={`block bg-white h-0.5 ${navOpen ? "relative rotate-45 top-[10px] w-8" : "w-6"}`} />
+        <button type="button" onClick={toggleNav} className={`block absolute right-8 top-7 text-code-yellow ${navOpen ? "h-[30px] mt-[-11px]" : null}`}>
+          <span className={`pointer-events-none block bg-white h-0.5 ${navOpen ? "relative rotate-45 top-[8px] w-8" : "w-6"}`} />
           {!navOpen && (
-            <span className="block bg-white w-6 h-0.5 mt-2" />
+            <span className="pointer-events-none block bg-white w-6 h-0.5 mt-2" />
           )}
-          <span className={`block bg-white h-0.5 ${navOpen ? "relative -rotate-45 top-[6px] w-8" : "w-6 mt-2"}`} />
+          <span className={`pointer-events-none block bg-white h-0.5 ${navOpen ? "relative -rotate-45 top-[6px] w-8" : "w-6 mt-2"}`} />
         </button>
         <h1 className="block font-semibold text-2xl w-18 absolute z-5 m-0 left-8 top-1/2 -translate-y-1/2 text-code-blue">
           <Link to="/">Dom Hart</Link>
@@ -46,7 +46,7 @@ const Nav: React.FC = () => {
       </nav>
       {navOpen &&
         <nav className="block bg-code-dark-gray w-full fixed z-50 left-0 top-[80px] px-8 h-full">
-          <ul className="md:text-center text-lg md:text-2xl font-medium text-white md:relative md:top-52">
+          <ul className="text-center text-lg md:text-2xl font-medium text-white relative top-24 md:top-52">
             <li className="block">
               <Link className="block py-2" onClick={goToLink} to="/">
                 <img src="../../images/logos/react.png" className="inline-block align-middle h-4 w-auto mr-3" />
@@ -56,7 +56,7 @@ const Nav: React.FC = () => {
             <li className="block mt-4">
               <Link className="block py-2" onClick={goToLink} to="/about">
                 <img src="../../images/logos/react.png" className="inline-block align-middle h-4 w-auto mr-3" />
-                <span className="inline-block align-middle">Career.tsx</span>
+                <span className="inline-block align-middle">About.tsx</span>
               </Link>
             </li>
             <li className="block mt-4">
