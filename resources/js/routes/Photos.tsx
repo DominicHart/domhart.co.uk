@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { getPhotos, uploadPhoto, savePhotoPositions, replacePhoto, deletePhotos, editPhoto, updatePhotoDetails } from '../api/Photo';
 import { PhotoGrid, PhotoItem, PhotoRows, sortPhotosIntoRows } from 'react-editable-photo-grid';
 import { File } from '../types/photo';
+import { Tag } from '../types/tag';
 import { useUser } from '../UserContext';
 import { savingData, apiUrl } from "../utils";
 import Swal from "sweetalert2";
 import Modal from 'react-modal';
 import ModalHeader from '../components/modal/ModalHeader';
+import ImageTags from "../components/ImageTags";
 import FileDrop from '../components/FileDrop';
 import PhotoMenu from '../components/photogrid/PhotoMenu';
+import { getTags } from '../api/Tag';
 
 const customStyles = {
   content: {
@@ -25,6 +28,12 @@ const customStyles = {
   overlay: { zIndex: 1000 }
 };
 
+type PhotoObject = {
+  name: string;
+  description: string;
+  tags: Array<String> | Tag[]
+};
+
 Modal.setAppElement('#app');
 
 const Photos: React.FC = () => {
@@ -37,8 +46,10 @@ const Photos: React.FC = () => {
     [changes, setChanges] = useState<number>(0),
     [isEditing, setIsEditing] = useState<boolean>(false),
     [editingId, setEditingId] = useState<string | null>(null),
-    [photo, setPhoto] = useState<PhotoItem | null>(null),
-    [activeDropdown, setActiveDropdown] = useState(null);
+    [photo, setPhoto] = useState<PhotoObject>({ name: '', description: '', tags: [] }),
+    [activeDropdown, setActiveDropdown] = useState(null),
+    [tags, setTags] = useState<Tag[]>([]),
+    [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const user = useUser();
 
@@ -63,7 +74,62 @@ const Photos: React.FC = () => {
     const photos = await getPhotos();
     setPhotos(photos);
     setRows(sortPhotosIntoRows(photos));
+    const tags = await getTags();
+    if (tags) {
+      setTags(tags);
+    }
     setLoading(false);
+  }
+
+  const getFilteredPhotos = () => {
+    if (!selectedTag) {
+      return photos;
+    }
+
+    let filteredPhotos: PhotoItem[] = [];
+
+    for (const photo of photos) {
+      if (photo.tags.length && photo.tags.includes(selectedTag)) {
+        filteredPhotos.push(photo);
+      }
+    }
+
+    return filteredPhotos;
+  }
+
+  const getFilteredRows = (): PhotoRows[] => {
+    if (!selectedTag) {
+      return rows;
+    }
+
+    const filteredPhotos = getFilteredPhotos();
+
+    let newRows: PhotoRows[] = [],
+      rowNumber: number = 1,
+      processed: number = 0;
+
+    for (const photo of filteredPhotos) {
+      processed++;
+
+      if (!newRows[rowNumber]) {
+        newRows[rowNumber] = [];
+      }
+
+      photo.column = processed;
+      photo.row = rowNumber;
+
+      newRows[rowNumber].push(photo);
+
+      if (processed % 4 === 0) {
+        rowNumber++;
+      }
+    }
+
+    return newRows;
+  }
+
+  const applyTag = (tagUuid: string | null): void => {
+    setSelectedTag(tagUuid);
   }
 
   const saveChanges = (e: any) => {
@@ -258,6 +324,12 @@ const Photos: React.FC = () => {
       return;
     }
 
+    let selectedTagIds = [];
+    for (const tag of photoData.tags) {
+      selectedTagIds.push(tag.ulid);
+    }
+    photoData.tags = selectedTagIds;
+
     setPhoto(photoData);
     setActiveModal(2);
   }
@@ -349,7 +421,7 @@ const Photos: React.FC = () => {
         style={customStyles}
       >
         <ModalHeader
-          title="Edit Image"
+          title="Edit Photo"
           closeModal={closeModal}
         />
         <form onSubmit={updatePhoto} method="post" action={`${apiUrl}/photos/${editingId}`}>
@@ -374,16 +446,50 @@ const Photos: React.FC = () => {
               onChange={(e: React.KeyboardEvent<HTMLInputElement>) => setPhoto({ ...photo, description: e.currentTarget.value })}
             />
           </div>
+          <div className="mt-4">
+            <label>Image Tags</label>
+            <ImageTags
+              selectedTags={photo.tags}
+              photoUuid={editingId}
+              updateSelectedTags={(selectedTags) => setPhoto({ ...photo, tags: selectedTags })}
+            />
+          </div>
         </form>
         <div className="text-right border-t border-gray-300 mt-6 py-6 px-3">
           <button type="button" className="border border-gray-300 py-3 px-6 font-semibold bg-gray-300 rounded" onClick={closeModal}>Dismiss</button>
           <button type="button" className="border border-code-dark-gray font-semibold py-3 px-6 ml-2 bg-code-dark-gray text-code-green rounded" onClick={updatePhoto}>Update Photo</button>
         </div>
       </Modal>
+      {tags.length > 0 && (
+        <div className="w-full overflow-x-auto pt-2 pb-1">
+          <ul className="block text-center">
+            <li className="inline-block [&+li]:ml-2">
+              <button
+                type="button"
+                className={`block py-0.5 px-2 font-semibold ${selectedTag === null ? 'text-gray-900' : 'text-blue-600'}`}
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); applyTag(null) }}
+              >
+                All
+                  </button>
+            </li>
+            {tags.map((tag, i) =>
+              <li key={`tag-filter-${i}`} className="inline-block [&+li]:ml-2">
+                <button
+                  type="button"
+                  className={`block py-0.5 px-2 font-semibold ${selectedTag === tag.ulid ? 'text-gray-900' : 'text-blue-600'}`}
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); applyTag(tag.ulid) }}
+                >
+                  {tag.title}
+                </button>
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
       <PhotoGrid
         isEditing={isEditing && user.user !== null}
-        photos={photos}
-        rows={rows}
+        photos={getFilteredPhotos()}
+        rows={getFilteredRows()}
         updateRows={setRows}
         selectedPhotos={selectedPhotos}
         updateSelectedPhotos={setSelectedPhotos}

@@ -60,7 +60,8 @@ class Photo implements IPhoto
                 'width' => $sizeMeta[0] ?? 0,
                 'height' => $sizeMeta[1] ?? 0,
                 'name' => $photo->title ?? '',
-                'description' => $photo->description ?? ''
+                'description' => $photo->description ?? '',
+                'tags' => $photo->tagIds()
             ];
         }
 
@@ -169,6 +170,7 @@ class Photo implements IPhoto
 
         $photo->title = $photo->title ?? '';
         $photo->description = $photo->description ?? '';
+        $photo->tags = $photo->tags()->get() ?? [];
 
         return $photo;
     }
@@ -306,6 +308,8 @@ class Photo implements IPhoto
     {
         $title = $data['title'] ?? null;
         $description = $data['description'] ?? null;
+        $tags = $data['tags'] ?? null;
+        $tagUlids = [];
 
         $photo = PhotoModel::where('ulid', $uuid)
             ->first();
@@ -313,6 +317,12 @@ class Photo implements IPhoto
         $photo->title = $title;
         $photo->description = $description;
         $photo->save();
+
+        $photo->tags()->detach();
+
+        if ($tags) {
+            $photo->tags()->attach($tags);
+        }
 
         return true;
     }

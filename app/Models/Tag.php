@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Support\Str;
 use Symfony\Component\Uid\Ulid;
+
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Photo extends Model
+class Tag extends Model
 {
-    use HasFactory;
-    use HasUlids;
+    use HasFactory, HasUlids;
 
     protected $primaryKey = 'ulid';
     public $incrementing = false;
@@ -31,17 +31,8 @@ class Photo extends Model
         });
     }
 
-    public function tags(): BelongsToMany
+    public function photos(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'photo_tag', 'photo_ulid', 'tag_ulid');
+        return $this->belongsToMany(Photo::class, 'photo_tag', 'tag_ulid', 'photo_ulid');
     }
-
-    public function tagIds(): array
-    {
-        return array_column(
-            $this->tags()->get()->toArray(),
-             'ulid'
-        );
-    }
-    
 }
