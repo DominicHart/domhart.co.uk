@@ -207,6 +207,8 @@ class Photo implements IPhoto
             return false;
         }
 
+        unset($photo->tags);
+
         if (!$data['photo']) {
             $error = 'Replacement file not found';
             return false;
