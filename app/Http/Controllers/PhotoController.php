@@ -76,7 +76,6 @@ class PhotoController extends Controller
         }
 
         return response()->json($photo, 200);
-
     }
 
     /**
